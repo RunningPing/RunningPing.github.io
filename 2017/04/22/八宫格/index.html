@@ -11,17 +11,17 @@
     
 
     
-    <meta name="description" content="题目描述拼图，是一个老少皆宜的益智游戏，在打乱的3*3的范围中，玩家只能每次将空格(0)和相邻的数字格（上、下、左、右）交换，最终调整出一个完整的拼图。完整拼图为：1 2 34 5 67 8 0 import java.io.;import java.util.;import java.text.;import java.math.;import java.util.regex.*;import">
+    <meta name="description" content="题目描述拼图，是一个老少皆宜的益智游戏，在打乱的3*3的范围中，玩家只能每次将空格(0)和相邻的数字格（上、下、左、右）交换，最终调整出一个完整的拼图。完整拼图为：1 2 34 5 67 8 0 import java.io.*; import java.util.*; import java.text.*; import java.math.*; import java.util.regex.*">
 <meta name="keywords" content="algorithm">
 <meta property="og:type" content="article">
 <meta property="og:title" content="八宫格">
 <meta property="og:url" content="https://runningping.github.io/ping.github.io/2017/04/22/八宫格/index.html">
 <meta property="og:site_name" content="RunningPing">
-<meta property="og:description" content="题目描述拼图，是一个老少皆宜的益智游戏，在打乱的3*3的范围中，玩家只能每次将空格(0)和相邻的数字格（上、下、左、右）交换，最终调整出一个完整的拼图。完整拼图为：1 2 34 5 67 8 0 import java.io.;import java.util.;import java.text.;import java.math.;import java.util.regex.*;import">
-<meta property="og:updated_time" content="2017-04-22T07:49:09.000Z">
+<meta property="og:description" content="题目描述拼图，是一个老少皆宜的益智游戏，在打乱的3*3的范围中，玩家只能每次将空格(0)和相邻的数字格（上、下、左、右）交换，最终调整出一个完整的拼图。完整拼图为：1 2 34 5 67 8 0 import java.io.*; import java.util.*; import java.text.*; import java.math.*; import java.util.regex.*">
+<meta property="og:updated_time" content="2017-04-22T08:00:12.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="八宫格">
-<meta name="twitter:description" content="题目描述拼图，是一个老少皆宜的益智游戏，在打乱的3*3的范围中，玩家只能每次将空格(0)和相邻的数字格（上、下、左、右）交换，最终调整出一个完整的拼图。完整拼图为：1 2 34 5 67 8 0 import java.io.;import java.util.;import java.text.;import java.math.;import java.util.regex.*;import">
+<meta name="twitter:description" content="题目描述拼图，是一个老少皆宜的益智游戏，在打乱的3*3的范围中，玩家只能每次将空格(0)和相邻的数字格（上、下、左、右）交换，最终调整出一个完整的拼图。完整拼图为：1 2 34 5 67 8 0 import java.io.*; import java.util.*; import java.text.*; import java.math.*; import java.util.regex.*">
 
     
     <link rel="alternative" href="/atom.xml" title="RunningPing" type="application/atom+xml">
@@ -49,7 +49,7 @@
 				<h1 class="site-name"><a href="/" title="RunningPing">RunningPing</a></h1>
 				<h2 class="blog-motto">biubiubiu</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -65,7 +65,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
 						<input type="hidden" name="q" value="site:runningping.github.io/ping.github.io">
 					</form>
 					
@@ -88,22 +88,32 @@
 		<a href="/about" title="Ping" target="_blank" itemprop="author">Ping</a>
 		
   <p class="article-time">
-    <time datetime="2017-04-22T07:37:51.000Z" itemprop="datePublished"> Published 2017-04-22</time>
+    <time datetime="2017-04-22T07:37:51.000Z" itemprop="datePublished"> 發表於 2017-04-22</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
+			<strong class="toc-title">文章目錄</strong>
 		
 			
 		
 		</div>
 		
 		<p><strong>题目描述</strong><br>拼图，是一个老少皆宜的益智游戏，在打乱的3*3的范围中，玩家只能每次将空格(0)和相邻的数字格（上、下、左、右）交换，最终调整出一个完整的拼图。<br>完整拼图为：<br>1 2 3<br>4 5 6<br>7 8 0</p>
-<p>import java.io.<em>;<br>import java.util.</em>;<br>import java.text.<em>;<br>import java.math.</em>;<br>import java.util.regex.*;<br>import java.util.Scanner;<br>import java.util.Set;<br>import java.util.HashSet;<br>import java.util.ArrayList;<br>import java.lang.StringBuilder;</p>
-<pre><code>//广度优先
+<pre><code>import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
+import java.util.Scanner;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.ArrayList;
+import java.lang.StringBuilder;
+
+//广度优先
 public class Main{
 
     //目标序列
@@ -263,20 +273,33 @@ class Node {
    	       
 	</article>
 	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2017/04/22/CombinationSum/"  title="CombinationSum">
+ <strong>下一篇：</strong><br/> 
+ <span>CombinationSum
+</span>
+</a>
+</div>
+
+</nav>
+
 	
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
+  <strong class="toc-title">文章目錄</strong>
  
  
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
 <aside class="clearfix">
 
   
@@ -286,7 +309,7 @@ class Node {
 
   
 <div class="tagslist">
-	<p class="asidetitle">Tags</p>
+	<p class="asidetitle">標簽</p>
 		<ul class="clearfix">
 		
 			
@@ -298,7 +321,7 @@ class Node {
 
 
   <div class="linkslist">
-  <p class="asidetitle">Links</p>
+  <p class="asidetitle">友情鏈接</p>
     <ul>
         
     </ul>
@@ -308,11 +331,11 @@ class Node {
 
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
 </div>
 
   <div class="weiboshow">
-  <p class="asidetitle">Weibo</p>
+  <p class="asidetitle">新浪微博</p>
     <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=null&verifier=&dpc=1"></iframe>
 </div>
 
@@ -529,7 +552,7 @@ $(document).ready(function(){
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
