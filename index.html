@@ -44,7 +44,7 @@
 				<h1 class="site-name"><a href="/" title="RunningPing">RunningPing</a></h1>
 				<h2 class="blog-motto">biubiubiu</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -60,7 +60,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:runningping.github.io/ping.github.io">
 					</form>
 					
@@ -72,285 +72,55 @@
     <div id="container">
       <div id="main">
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/04/22/CombinationSum/" title="CombinationSum" itemprop="url">CombinationSum</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Ping" target="_blank" itemprop="author">Ping</a>
-		
-  <p class="article-time">
-    <time datetime="2017-04-22T07:58:33.000Z" itemprop="datePublished"> 發表於 2017-04-22</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p><strong>CombinationSum</strong><br>Given a set of candidate numbers (C) and a target number (T), find all unique<br>combinations in C where<br>the candidate numbers sums to T.</p>
-<p>The same repeated number may be chosen from C unlimited number of times.</p>
-<p>Note:</p>
-<p>All numbers (including target) will be positive integers.<br>Elements in a combination must be in non-descending order.<br>The solution set must not contain duplicate combinations.<br>For example, given candidate set 2,3,6,7 and target 7,<br>A solution set is:<br>[7]<br>[2, 2, 3] </p>
-<pre><code>public class CombinationSum {
-    public ArrayList&lt;ArrayList&lt;Integer&gt;&gt; combinationSum(int[] candidates, int target) {
-        Arrays.sort(candidates);
-        ArrayList&lt;ArrayList&lt;Integer&gt;&gt; res = new ArrayList&lt;ArrayList&lt;Integer&gt;&gt;();
-        ArrayList&lt;Integer&gt; list = new ArrayList&lt;Integer&gt;();
-        dfs(res, list, candidates, 0, 0, target);
-        return res;
-    }
-
-    public void dfs(ArrayList&lt;ArrayList&lt;Integer&gt;&gt; res, ArrayList&lt;Integer&gt; list,
-            int[] num, int pos, int sum, int target) {
-        if(sum == target)
-            res.add(new ArrayList&lt;Integer&gt;(list));
-        if(sum &lt; target) {
-            for(int i = pos; i &lt; num.length; i++) {
-                list.add(num[i]);
-                dfs(res, list, num, i, sum + num[i], target);
-                list.remove(list.size() - 1);
-            }
-        }
-    }
-}
-</code></pre>
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/04/22/八宫格/" title="八宫格" itemprop="url">八宫格</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Ping" target="_blank" itemprop="author">Ping</a>
-		
-  <p class="article-time">
-    <time datetime="2017-04-22T07:37:51.000Z" itemprop="datePublished"> 發表於 2017-04-22</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p><strong>题目描述</strong><br>拼图，是一个老少皆宜的益智游戏，在打乱的3*3的范围中，玩家只能每次将空格(0)和相邻的数字格（上、下、左、右）交换，最终调整出一个完整的拼图。<br>完整拼图为：<br>1 2 3<br>4 5 6<br>7 8 0</p>
-<pre><code>import java.io.*;
-import java.util.*;
-import java.text.*;
-import java.math.*;
-import java.util.regex.*;
-import java.util.Scanner;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.ArrayList;
-import java.lang.StringBuilder;
-
-//广度优先
-public class Main{
-
-    //目标序列
-    public static String destNumbers = &quot;123456780&quot;;
-    //已计算Set，用来判断哪些位置已经移动到过
-    public static Set&lt;Integer&gt; set = new HashSet&lt;Integer&gt;();
-
-    //0在每一位置的可移动(交换)规则[上(1) 左(2) 右(4) 下(8),位或关系]
-    public static int[]moveTable = new int[]{12,14,10,13,15,11,5,7,3};
-
-
-    /*
-    上(1) 左(2) 右(4) 下(8)
-    0 -&gt; 右 下(12)
-    1 -&gt; 左 右 下(14)
-    2 -&gt; 左 下(10)
-    3 -&gt; 上 右 下(13)
-    4 -&gt; 上 左 下 右(15)
-    5 -&gt; 上 左 下(11)
-    6 -&gt; 上 右(5)
-    7 -&gt; 左 上 右(7)
-    8 -&gt; 上 左(3)
-    */
-    //moveStatus 上(1) 左(2) 右(4) 下(8)
-    public static ArrayList&lt;Node&gt; getNextMoveList(Node pNode){
-
-        int position = pNode.numbers.indexOf(&quot;0&quot;);
-        int moveStatus = moveTable[position];
-        ArrayList&lt;Node&gt; cNodes = new ArrayList&lt;Node&gt;();
-
-
-        for(int status=1; status &lt;=8; status=status&lt;&lt;1){
-            if((moveStatus &amp; status) &gt; 0){
-                char[] charNumbers = pNode.numbers.toCharArray();
-                int switchPosition = 0;
-                if(status == 1){//上
-                switchPosition = position - 3;
-                } else if(status == 2){//左
-                switchPosition = position - 1;
-                } else if(status == 4){//右
-                switchPosition = position + 1;
-                } else if(status == 8){//下
-                switchPosition = position + 3;
-                }
-                charNumbers[position] = charNumbers[switchPosition];
-                charNumbers[switchPosition] = &apos;0&apos;;
-                String s = String.valueOf(charNumbers);
-                //判断此序列未出现过
-                if(!set.contains(Integer.valueOf(s))){
-                    set.add(Integer.valueOf(s));
-                    Node n = new Node(pNode, s, charNumbers[position]);
-                    cNodes.add(n);
-                }
-            }
-        }
-        return cNodes;
-    }
-
-    /*请完成下面这个函数，实现题目要求的功能*/
-    /*当然，你也可以不按照下面这个模板来作答，完全按照自己的想法来 ^-^ */
-    /******************************开始写代码******************************/
-
-    //输出结果
-    static int getResult(Node node){
-        String result = &quot;&quot;;
-        while(node.parentNode != null){
-            result += node.currentNum;
-            node = node.parentNode;
-        }
-        return new StringBuffer(result).reverse().toString().length();
-    }
-
-    static int run(String numbers){
-        if(numbers.equals(destNumbers)){
-            //无需移动
-            return 0;
-        }
-        ArrayList&lt;Node&gt; numsList = new ArrayList&lt;Node&gt;();
-        //初始化根节点
-        numsList.add(new Node(null, numbers, &apos; &apos;));
-        while(numsList.size() &gt; 0){
-            //广度优先每层的tmpList
-            ArrayList&lt;Node&gt; tmpList = new ArrayList&lt;Node&gt;();
-
-            for(Node pNode : numsList){
-                ArrayList&lt;Node&gt; cNodes = getNextMoveList(pNode);
-
-                for(Node cNode : cNodes){
-                    if(cNode.numbers.equals(destNumbers)){
-                        //返回步数
-                        return getResult(cNode);
-                    }
-                    tmpList.add(cNode);
-                }
-            }
-
-            numsList = tmpList;
-        }
-        //无解
-        return -1;
-    }
-/******************************结束写代码******************************/
-
-    public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
-
-        String numbers = new String();
-        for(int rows=3; rows&gt;0; rows--){
-            for(String n: scan.nextLine().split(&quot; &quot;)){
-                numbers += n;
-            }
-        }
-
-        int res = run(numbers);
-
-        System.out.println(String.valueOf(res));
-    }
-}
-
-
-//节点类
-class Node {
-    public Node(Node parentNode, String numbers, char currentNum){
-        this.numbers = numbers;
-        this.currentNum = currentNum;
-        this.parentNode = parentNode;
-    }
-    public char currentNum;            //节点当前移动的数字
-    public String numbers;    //当前数字序列字符
-    public Node parentNode;           //父节点
-}
-</code></pre>
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
   
-  <span></span> <a href="/tags/algorithm/">algorithm</a>
-  </div>
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2017/04/22/CombinationSum/" title="CombinationSum" itemprop="url">
+  
+    <h1 itemprop="name">CombinationSum</h1>
+    
+     
+           <p itemprop="description" >CombinationSumGiven a set of candidate numbers (C) and a target number (T), find all uniquecombinations in C wherethe candidate numbers sums</p>
+        
+    
+    <time datetime="2017-04-22T07:58:33.000Z" itemprop="datePublished">2017-04-22</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2017/04/22/八宫格/" title="八宫格" itemprop="url">
+  
+    <h1 itemprop="name">八宫格</h1>
+    
+     
+           <p itemprop="description" >题目描述拼图，是一个老少皆宜的益智游戏，在打乱的3*3的范围中，玩家只能每次将空格(0)和相邻的数字格（上、下、左、右）交换，最终调整出一个完整的拼图。完整拼图为：1 2 34 5 67 8 0
+import java.io.*;
+import java.util.*;
+impo</p>
+        
+    
+    <time datetime="2017-04-22T07:37:51.000Z" itemprop="datePublished">2017-04-22</time>
+  </a>
+</section>
+
+
+
+
+
+
 
 </div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-
-</div>
-      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
@@ -360,11 +130,11 @@ class Node {
 
   
 <div class="tagslist">
-	<p class="asidetitle">標簽</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/algorithm/" title="algorithm">algorithm<sup>1</sup></a></li>
+				<li><a href="/tags/algorithm/" title="algorithm">algorithm<sup>2</sup></a></li>
 			
 		
 		</ul>
@@ -372,7 +142,7 @@ class Node {
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情鏈接</p>
+  <p class="asidetitle">Links</p>
     <ul>
         
     </ul>
@@ -382,11 +152,11 @@ class Node {
 
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
 </div>
 
   <div class="weiboshow">
-  <p class="asidetitle">新浪微博</p>
+  <p class="asidetitle">Weibo</p>
     <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=null&verifier=&dpc=1"></iframe>
 </div>
 
@@ -526,7 +296,7 @@ $(document).ready(function(){
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
