@@ -1,0 +1,449 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-cn">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>BaiduyunpanSearch | RunningPing</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Ping">
+    
+
+    
+    <meta name="description" content="背景  网上有很多网盘搜索引擎，搜索引擎其实就是网络爬虫的一种，怎样写一个网络爬虫呢，现在还不会，下一步再学习这方面的内容，这次做的网盘搜索功能可以说是取巧，这是基于谷歌自定义搜索功能实现的。在天朝，我们是无法访问谷歌，自然也用不了谷歌的服务，要是想使用，可以通过挂vpn的方法或者是改hosts文件，其实都挺麻烦，所以能就算注册了一个搜索百度网盘的自定义引擎，使用起来也不方便。正好学习了JavaW">
+<meta name="keywords" content="JSP&Servlet">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BaiduyunpanSearch">
+<meta property="og:url" content="https://runningping.github.io/ping.github.io/2017/10/12/baiduyun/index.html">
+<meta property="og:site_name" content="RunningPing">
+<meta property="og:description" content="背景  网上有很多网盘搜索引擎，搜索引擎其实就是网络爬虫的一种，怎样写一个网络爬虫呢，现在还不会，下一步再学习这方面的内容，这次做的网盘搜索功能可以说是取巧，这是基于谷歌自定义搜索功能实现的。在天朝，我们是无法访问谷歌，自然也用不了谷歌的服务，要是想使用，可以通过挂vpn的方法或者是改hosts文件，其实都挺麻烦，所以能就算注册了一个搜索百度网盘的自定义引擎，使用起来也不方便。正好学习了JavaW">
+<meta property="og:updated_time" content="2017-10-12T09:38:17.905Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="BaiduyunpanSearch">
+<meta name="twitter:description" content="背景  网上有很多网盘搜索引擎，搜索引擎其实就是网络爬虫的一种，怎样写一个网络爬虫呢，现在还不会，下一步再学习这方面的内容，这次做的网盘搜索功能可以说是取巧，这是基于谷歌自定义搜索功能实现的。在天朝，我们是无法访问谷歌，自然也用不了谷歌的服务，要是想使用，可以通过挂vpn的方法或者是改hosts文件，其实都挺麻烦，所以能就算注册了一个搜索百度网盘的自定义引擎，使用起来也不方便。正好学习了JavaW">
+
+    
+    <link rel="alternative" href="/atom.xml" title="RunningPing" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="RunningPing" title="RunningPing"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="RunningPing">RunningPing</a></h1>
+				<h2 class="blog-motto">biubiubiu</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:runningping.github.io/ping.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/10/12/baiduyun/" title="BaiduyunpanSearch" itemprop="url">BaiduyunpanSearch</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Ping" target="_blank" itemprop="author">Ping</a>
+		
+  <p class="article-time">
+    <time datetime="2017-10-12T09:36:51.000Z" itemprop="datePublished"> Published 2017-10-12</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#原理"><span class="toc-number">2.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#实现"><span class="toc-number">3.</span> <span class="toc-text">实现</span></a></li></ol>
+		
+		</div>
+		
+		<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>  网上有很多网盘搜索引擎，搜索引擎其实就是网络爬虫的一种，怎样写一个网络爬虫呢，现在还不会，下一步再学习这方面的内容，这次做的网盘搜索功能可以说是取巧，这是基于谷歌自定义搜索功能实现的。在天朝，我们是无法访问谷歌，自然也用不了谷歌的服务，要是想使用，可以通过挂vpn的方法或者是改hosts文件，其实都挺麻烦，所以能就算注册了一个搜索百度网盘的自定义引擎，使用起来也不方便。正好学习了JavaWeb却苦于做不了一个有用处的小网站，所以用JSP&amp;Servlet写了一个网盘搜索小应用。</p>  
+
+<hr>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>首先我们去谷歌注册一个搜索百度网盘（pan.baidu.com）的自定义搜索引擎。然后谷歌会提供一个链接以及搜索实例，使用Chrome或者FireFox按F12我们可以发现，点击搜索的时候，网页发送了一个post请求，使用的是Ajax，返回的信息是使用Json来传输的我的链接是</p>
+
+<pre>https://www.googleapis.com/customsearch/v1element?key=AIzaSyCVAXiUzRYsML1Pv6RwSG1gunmMikTzQqY&rsz=filtered_cse&num=10&hl=zh_CN&prettyPrint=false&source=gcsc&gss=.com&sig=581c068e7ad56cae00e4e2e8f7dc3837&start=&cx=008198444555669851682:_t7wuf482fw&q=&sort=&googlehost=www.google.com&callback=google.search.Search.apiary9731</pre>
+
+<p>多次搜索我们可以发现这个链接的中<code>q</code>总是等于我们搜索的内容，<code>start</code>总是等于所要分页的数字，所以可以推断出，改变这两个参数的值，我们就可以实现了对百度网盘的搜索，设置<code>q=java;start=0;</code>,然后将整个链接粘贴到浏览器地址栏我们可以发现，浏览器返回了一大堆Json串，这时我们用在线的json转换工具可以看到，格式化的Json数据，可以清晰的看到，title参数显示了查询到的数据标题，content显示了内容介绍的摘要，经测试发现，unescapedUrl参数是网盘的Url,知道这些，我们就可以自己写程序来解析返回的Json串，再通过网页的形式返回，就可以实现一个百度网盘的搜索引擎了。 </p>
+<hr>
+<h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><p>jsp页面关键源代码：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">   //检测输入的值是否为空</div><div class="line">   function checkForm()&#123;</div><div class="line">	var q=document.getElementById("q");</div><div class="line">	if(q.value==null || q.value=="")&#123;</div><div class="line">		alert("请输入需要搜索的信息！");</div><div class="line">		return false;</div><div class="line">	&#125;</div><div class="line">	return true;</div><div class="line">&#125;</div><div class="line">//使用Ajax还进行页面的更新，将用户输入的信息传入servlet执行，获得返回的Json数据，然后利用返回的Json字符串进行页面的更新</div><div class="line">function loadData(q,start)&#123;</div><div class="line">	$.getJSON("http://www.runningping.cn/TryYun/BaiduyunServlet?",&#123;q:q,start:start&#125;,function(result)&#123;</div><div class="line">		if(result.length==0)&#123;</div><div class="line">			alert("未搜索到结果，请换个关键字！");</div><div class="line">		&#125;else&#123;</div><div class="line">			$("#result").children().remove();</div><div class="line">			$("#result").append("<span class="tag">&lt;<span class="name">font</span>&gt;</span>搜索结果：<span class="tag">&lt;/<span class="name">font</span>&gt;</span><span class="tag">&lt;<span class="name">hr</span> <span class="attr">style</span>=<span class="string">'margin-top: 2px; margin-bottom: 10px;'</span>&gt;</span><span class="tag">&lt;/<span class="name">hr</span>&gt;</span>");</div><div class="line">			$.each(result,function(i,val)&#123;</div><div class="line">				var di=$("<span class="tag">&lt;<span class="name">p</span>&gt;</span>"+"<span class="tag">&lt;<span class="name">a</span> <span class="attr">style</span>=<span class="string">'font-size:16px;color:#1f4fcd;text-decoration:underline;'</span> <span class="attr">href</span>=<span class="string">'"+val.unescapedUrl+"'</span> <span class="attr">target</span>=<span class="string">'_blank'</span>&gt;</span>"+val.title+"<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">br</span>&gt;</span>"+</div><div class="line">						  "<span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">'font-size:14px'</span>&gt;</span>"+val.content+"<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">br</span>&gt;</span>"+</div><div class="line">						  "<span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">'color:green;font-size:13px'</span>&gt;</span>"+val.unescapedUrl.substring(0, 100) +"...<span class="tag">&lt;/<span class="name">span</span>&gt;</span>"+</div><div class="line">						"<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span>");</div><div class="line">				$("#result").append(di);</div><div class="line">			&#125;);</div><div class="line">			$("#cse2").remove();</div><div class="line">			$("#pa").show();</div><div class="line">		&#125;</div><div class="line">	&#125;,"json");</div><div class="line">&#125;</div><div class="line">//执行页面传来的查询函数</div><div class="line">loadData("$&#123;param.q&#125;",0);</div></pre></td></tr></table></figure>
+<p>Servlet部分关键源代码:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">   <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doPost</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</div><div class="line">	request.setCharacterEncoding(<span class="string">"utf-8"</span>);</div><div class="line">	String q1=URLEncoder.encode(request.getParameter(<span class="string">"q"</span>),<span class="string">"utf-8"</span>);</div><div class="line">	System.out.println(q1);</div><div class="line">	String start=request.getParameter(<span class="string">"start"</span>);</div><div class="line">	String urlStr=<span class="string">"https://www.googleapis.com/customsearch/v1element?key=AIzaSyCVAXiUzRYsML1Pv6RwSG1gunmMikTzQqY&amp;rsz=filtered_cse&amp;num=10&amp;hl=zh_CN&amp;prettyPrint=false&amp;source=gcsc&amp;gss=.com&amp;sig=581c068e7ad56cae00e4e2e8f7dc3837&amp;start="</span>+start+<span class="string">"&amp;cx=008198444555669851682:_t7wuf482fw&amp;q="</span>+q1+<span class="string">"&amp;sort=&amp;googlehost=www.google.com&amp;callback=google.search.Search.apiary9731"</span>;</div><div class="line">	URL url=<span class="keyword">new</span> URL(urlStr);</div><div class="line">	BufferedReader bufr=<span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(<span class="keyword">new</span> BufferedInputStream(url.openStream()), <span class="string">"utf-8"</span>));</div><div class="line">	String line;</div><div class="line">	StringBuffer sb=<span class="keyword">new</span> StringBuffer();</div><div class="line">	<span class="keyword">while</span>((line=bufr.readLine())!=<span class="keyword">null</span>)&#123;</div><div class="line">		sb.append(line);</div><div class="line">	&#125;</div><div class="line">	bufr.close();</div><div class="line">	String sbNew=sb.toString().substring(<span class="number">47</span>);</div><div class="line">	sbNew+=<span class="string">"&#125;"</span>;</div><div class="line">	JSONObject jsonObject=JSONObject.fromObject(sbNew);</div><div class="line">	JSONArray results=jsonObject.getJSONArray(<span class="string">"results"</span>);</div><div class="line">	JSONArray r=<span class="keyword">new</span> JSONArray();</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;results.size();i++)&#123;</div><div class="line">		JSONObject j=(JSONObject) results.get(i);</div><div class="line">		JSONObject o=<span class="keyword">new</span> JSONObject();</div><div class="line">		o.put(<span class="string">"title"</span>, j.get(<span class="string">"title"</span>));</div><div class="line">		o.put(<span class="string">"content"</span>, j.get(<span class="string">"content"</span>));</div><div class="line">		o.put(<span class="string">"unescapedUrl"</span>, j.get(<span class="string">"unescapedUrl"</span>));</div><div class="line">		r.add(o);</div><div class="line">	&#125;</div><div class="line">	response.setContentType(<span class="string">"text/html;charset=utf-8"</span>);</div><div class="line">	PrintWriter out=response.getWriter();</div><div class="line">	out.println(r.toString());</div><div class="line">	out.flush();</div><div class="line">	out.close();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/JSP-Servlet/">JSP&Servlet</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://runningping.github.io/ping.github.io/2017/10/12/baiduyun/" data-title="BaiduyunpanSearch | RunningPing" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/06/14/Durant/" title="Durant and Dream">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Durant and Dream</span>
+</a>
+</div>
+
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#原理"><span class="toc-number">2.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#实现"><span class="toc-number">3.</span> <span class="toc-text">实现</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/algorithm/" title="algorithm">algorithm<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Unclassified/" title="Unclassified">Unclassified<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JSP-Servlet/" title="JSP&amp;Servlet">JSP&amp;Servlet<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=null&verifier=&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Larry Page in Google. <br/>
+			This is my blog,believe it or not.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2398935587" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="Ping">Ping</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
