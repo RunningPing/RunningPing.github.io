@@ -1,0 +1,465 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-cn">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Crawler | RunningPing</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Ping">
+    
+
+    
+    <meta name="description" content="爬虫  闲来无事，突然想写爬虫了，因为感慨信息的繁杂，用爬虫可以很好的帮我初步过滤网页上的信息，也不用间一些乱七八糟的广告，更关键的是还可以利用爬虫解决一些很实际的问题，比如期末考试成绩出来了，可以不停定时的循环刷新自己的页面一有成绩出现就通知自己，或者发邮件或者发短信之类的，最主要的是，不是特别大型网站一般都是没有反扒措施的，所以一个简单爬虫就会有各种一想不到的结果。    这里我是使用Java">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Crawler">
+<meta property="og:url" content="https://runningping.github.io/ping.github.io/2017/10/13/Crawler/index.html">
+<meta property="og:site_name" content="RunningPing">
+<meta property="og:description" content="爬虫  闲来无事，突然想写爬虫了，因为感慨信息的繁杂，用爬虫可以很好的帮我初步过滤网页上的信息，也不用间一些乱七八糟的广告，更关键的是还可以利用爬虫解决一些很实际的问题，比如期末考试成绩出来了，可以不停定时的循环刷新自己的页面一有成绩出现就通知自己，或者发邮件或者发短信之类的，最主要的是，不是特别大型网站一般都是没有反扒措施的，所以一个简单爬虫就会有各种一想不到的结果。    这里我是使用Java">
+<meta property="og:updated_time" content="2017-10-13T13:28:38.001Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Crawler">
+<meta name="twitter:description" content="爬虫  闲来无事，突然想写爬虫了，因为感慨信息的繁杂，用爬虫可以很好的帮我初步过滤网页上的信息，也不用间一些乱七八糟的广告，更关键的是还可以利用爬虫解决一些很实际的问题，比如期末考试成绩出来了，可以不停定时的循环刷新自己的页面一有成绩出现就通知自己，或者发邮件或者发短信之类的，最主要的是，不是特别大型网站一般都是没有反扒措施的，所以一个简单爬虫就会有各种一想不到的结果。    这里我是使用Java">
+
+    
+    <link rel="alternative" href="/atom.xml" title="RunningPing" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="RunningPing" title="RunningPing"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="RunningPing">RunningPing</a></h1>
+				<h2 class="blog-motto">biubiubiu</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:runningping.github.io/ping.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/10/13/Crawler/" title="Crawler" itemprop="url">Crawler</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Ping" target="_blank" itemprop="author">Ping</a>
+		
+  <p class="article-time">
+    <time datetime="2017-10-13T13:21:51.000Z" itemprop="datePublished"> Published 2017-10-13</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#爬虫"><span class="toc-number">1.</span> <span class="toc-text">爬虫</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取网页"><span class="toc-number">2.</span> <span class="toc-text">获取网页</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取图片"><span class="toc-number">3.</span> <span class="toc-text">获取图片</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取所有想要的网页"><span class="toc-number">4.</span> <span class="toc-text">获取所有想要的网页</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="爬虫"><a href="#爬虫" class="headerlink" title="爬虫"></a>爬虫</h2><p>  闲来无事，突然想写爬虫了，因为感慨信息的繁杂，用爬虫可以很好的帮我初步过滤网页上的信息，也不用间一些乱七八糟的广告，更关键的是还可以利用爬虫解决一些很实际的问题，比如期末考试成绩出来了，可以不停定时的循环刷新自己的页面一有成绩出现就通知自己，或者发邮件或者发短信之类的，最主要的是，不是特别大型网站一般都是没有反扒措施的，所以一个简单爬虫就会有各种一想不到的结果。</p>
+
+<p>  这里我是使用Java来实现的，主要使用两个包，httpclient和jsoup，其中使用httpclient来下载网页即html文档，使用jsoup来对dom节点进行过滤，获取一些我需要的信息。下面来详细介绍一下。以爬取学校内网中的网站睿思测试，去爬取我想要的图片。</p>  
+
+<hr>
+<h2 id="获取网页"><a href="#获取网页" class="headerlink" title="获取网页"></a>获取网页</h2><p>  httpclient是安卓中采取的进行通信的使用包，很好用，我们单独利用它可以实现下载网页的功能。</p>  
+
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div></pre></td><td class="code"><pre><div class="line">    public static String getContent(String urlString) &#123;</div><div class="line">    		String src = "";</div><div class="line">    		if (null == urlString || urlString.isEmpty() || !urlString.startsWith("http")) &#123;// 如果urlString为null或者urlString为空，或urlString非http开头，返回src空值</div><div class="line">    			return src;</div><div class="line">    		&#125;</div><div class="line">    		CloseableHttpResponse response = null;</div><div class="line">    		HttpGet httpGet = null;</div><div class="line">    		urlString = urlString.trim();</div><div class="line">    		try &#123;</div><div class="line">    			URL url = new URL(urlString);</div><div class="line">    			URI uri = new URI(url.getProtocol(), url.getHost(), url.getPath(), url.getQuery(), null);</div><div class="line">    			httpGet = new HttpGet(uri);</div><div class="line">    			httpGet.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");</div><div class="line">    			httpGet.addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");</div><div class="line">    			httpGet.addHeader("Connection", "keep-alive");</div><div class="line">    			httpGet.addHeader("Accept-Encoding", "gzip, deflate");</div><div class="line">    			httpGet.addHeader("User-Agent",</div><div class="line">    					"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.152 Safari/537.36");</div><div class="line">    			httpGet.addHeader("Cookie",</div><div class="line">    					"UM_distinctid=15ad4707f8311b-0abc44c1bb8345-4c594131-100200-15ad4707f8469;safedog-flow-item=0652D496DBCD67CF7669013A0C745DB5;Q8qA_2132_saltkey=fPq1RIIP;Q8qA_2132_lastvisit=1490608808;Q8qA_2132_ulastactivity=214csLFFG52v4pVApxjgyzWEdldItgvsh4SLeNIbxSVb1M3bdcJ0;Q8qA_2132_auth=79cdRv5nZ4GJDu30FG%2FeOlF8JFPbpyH%2F3NflpSumlZfy2JElgf5xoMXKDCgFz6AuXtEI0XSO2uvPrnf02SdpbMpnfJY;Q8qA_2132_lastcheckfeed=293607%7C1490612433;Q8qA_2132_nofavfid=1;Q8qA_2132_visitedfid=217D72;Q8qA_2132_smile=1D1;Q8qA_2132_sid=xc044D;Q8qA_2132_lip=10.177.239.244%2C1492599152;Q8qA_2132_lastact=1492612487%09misc.php%09patch;Q8qA_2132_myrepeat_rr=R0; Q8qA_2132_sendmail=1");</div><div class="line">    			response = MyHttpGetContent.getMyHttpGetContentInstance().getHttpClient().execute(httpGet);</div><div class="line">    			int statuCode = response.getStatusLine().getStatusCode();</div><div class="line">    			switch (statuCode) &#123;</div><div class="line">    			case 200:</div><div class="line">    				HttpEntity entity = response.getEntity();</div><div class="line">    				InputStream inputStream = entity.getContent();</div><div class="line">    				BufferedInputStream bis = new BufferedInputStream(inputStream);</div><div class="line">    				ByteArrayBuffer buffer = new ByteArrayBuffer(4096);</div><div class="line">    				byte[] temp = new byte[4096];</div><div class="line">    				int count;</div><div class="line">    				String charset = null;</div><div class="line">    				while ((count = bis.read(temp)) != -1) &#123;</div><div class="line">    					buffer.append(temp, 0, count);</div><div class="line">    					;</div><div class="line">    				&#125;</div><div class="line">    				for (HeaderElement headerElement : entity.getContentType().getElements()) &#123;</div><div class="line">    					if (headerElement.toString().contains("utf-8"))</div><div class="line">    						charset = "utf-8";</div><div class="line">    				&#125;</div><div class="line">    				;</div><div class="line">    				if (charset == null) &#123;</div><div class="line">    					charset = "GB2312";</div><div class="line">    				&#125;</div><div class="line">    				src = new String(buffer.toByteArray(), charset);</div><div class="line">    				break;</div><div class="line">    			default:</div><div class="line">    				System.out.println("读取失败");</div><div class="line">    			&#125;</div><div class="line">    		&#125; catch (Exception e) &#123;</div><div class="line">    			// TODO Auto-generated catch block</div><div class="line">    			e.printStackTrace();</div><div class="line">    		&#125; finally &#123;</div><div class="line">    			if (response != null) &#123;</div><div class="line">    				try &#123;</div><div class="line">    					response.close();</div><div class="line">    				&#125; catch (IOException e) &#123;</div><div class="line">    					// TODO Auto-generated catch block</div><div class="line">    					e.printStackTrace();</div><div class="line">    				&#125;</div><div class="line">    			&#125;</div><div class="line">    			httpGet.abort();</div><div class="line">    		&#125;</div><div class="line">    </div><div class="line">    		return src;</div><div class="line">    	&#125;</div><div class="line">```    	</div><div class="line"></div><div class="line">&lt;p&gt;  这是获取网页的主要API，通过这个函数简单介绍一下httpclient怎样获取一个网页的，如同浏览器一样，httpclient也要发送请求给服务器然后接受服务器的数据，发送请求的方式有两种，一种是get，一种是post，相应的httpclient中也有HttpGet和HttpPost两个类，这里我使用的是httpget，因为睿思是通过cookies来记录登录状态的，所以必须预先获取一个cookie才能进行访问，就和北邮人一样，所以我就从浏览器里面的得到我登录后的cookie，很多需要登录才能显示内容的网站都可以这样做，通过设置header选项即可设置cookie。httpclient中需要CloseableHttpClient的execute方法执行请求，并获得结果返回包含dom节点的CloseableHttpResponse类，通过解析它即可获取所得到的网页。&lt;/p&gt;</div><div class="line"></div><div class="line">---</div><div class="line"></div><div class="line">## 过滤网页</div><div class="line"></div><div class="line">&lt;p&gt;  需要分析网页的html源码，通过使用jsoup来实现dom节点的获取，下面是源码：&lt;/p&gt;</div><div class="line"></div><div class="line">```java</div><div class="line">    public static ArrayList&lt;String&gt; getPicture(String url) &#123;</div><div class="line">    		ArrayList&lt;String&gt; picUrls = new ArrayList&lt;&gt;();</div><div class="line">    		String srcHtml = MyHttpGetContent.getContent(url);</div><div class="line">    		Document doc = Jsoup.parse(srcHtml, url);</div><div class="line">    		Element bodyContent = doc.body();</div><div class="line">    		Elements aTargets = bodyContent.getElementsByTag("ignore_js_op");</div><div class="line">    		for (Element aTarget : aTargets) &#123;</div><div class="line">    			for (Element imgUrl : aTarget.getElementsByTag("img")) &#123;</div><div class="line">    				String picUrl = imgUrl.attr("abs:zoomfile");</div><div class="line">    				if (!picUrl.equals("")) &#123;</div><div class="line">    					picUrls.add(picUrl);</div><div class="line">    				&#125;</div><div class="line">    			&#125;</div><div class="line">    		&#125;</div><div class="line">    		return picUrls;</div><div class="line">    	&#125;</div></pre></td></tr></table></figure>
+<p>  jsoup具体怎么使用可以去看网上的教程，或者官网提供的API，这里我简单对照源码说一下用法，jsoup的parse方法可以将html页面解析成dom节点，并将所有的节点放在element的结构中，并且满足原来的dom节点组合方式，所以可以通过多element不断地过滤来获得自己想要的节点，过滤的方式是通过JQuery中选取元素的手法，也就是css中的选择器，这样就很便捷的实现了元素的获取。</p>
+
+<hr>
+<h2 id="获取图片"><a href="#获取图片" class="headerlink" title="获取图片"></a>获取图片</h2><p>  通过上一步解析得到图片的URL就可以再次使用httpclient来获取图片并保存了，源码如下：</p>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">savePicetur</span><span class="params">(String urlString, String imageName, <span class="keyword">int</span> num)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">		File dir = <span class="keyword">new</span> File(<span class="string">"D:/Use/rspic"</span>);</div><div class="line">		<span class="keyword">if</span> (!dir.exists()) &#123;</div><div class="line">			dir.mkdirs();</div><div class="line">		&#125;</div><div class="line">		String tmp = imageName.substring(imageName.indexOf(<span class="string">"?"</span>) + <span class="number">1</span>)</div><div class="line">				+ urlString.substring(urlString.lastIndexOf(<span class="string">"/"</span>) + <span class="number">1</span>);</div><div class="line">		File file = <span class="keyword">null</span>;</div><div class="line">		BufferedOutputStream bos = <span class="keyword">null</span>;</div><div class="line">		OutputStream os = <span class="keyword">null</span>;</div><div class="line">		<span class="keyword">if</span> (<span class="keyword">null</span> == urlString || urlString.isEmpty() || !urlString.startsWith(<span class="string">"http"</span>)) &#123;<span class="comment">// 如果urlString为null或者urlString为空，或urlString非http开头，返回src空值</span></div><div class="line">			<span class="keyword">return</span>;</div><div class="line">		&#125;</div><div class="line">		CloseableHttpResponse response = <span class="keyword">null</span>;</div><div class="line">		HttpGet httpGet = <span class="keyword">null</span>;</div><div class="line">		urlString = urlString.trim();</div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			URL url = <span class="keyword">new</span> URL(urlString);</div><div class="line">			URI uri = <span class="keyword">new</span> URI(url.getProtocol(), url.getHost(), url.getPath(), url.getQuery(), <span class="keyword">null</span>);</div><div class="line">			httpGet = <span class="keyword">new</span> HttpGet(uri);</div><div class="line">			httpGet.addHeader(<span class="string">"Accept"</span>, <span class="string">"*/*"</span>);</div><div class="line">			httpGet.addHeader(<span class="string">"Connection"</span>, <span class="string">"keep-alive"</span>);</div><div class="line">			httpGet.addHeader(<span class="string">"User-Agent"</span>,</div><div class="line">					<span class="string">"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.152 Safari/537.36"</span>);</div><div class="line">			response = MyHttpGetContent.getMyHttpGetContentInstance().getHttpClient().execute(httpGet);</div><div class="line">			<span class="keyword">int</span> statuCode = response.getStatusLine().getStatusCode();</div><div class="line">			<span class="keyword">switch</span> (statuCode) &#123;</div><div class="line">			<span class="keyword">case</span> <span class="number">200</span>:</div><div class="line">				<span class="keyword">try</span> &#123;</div><div class="line">					file = <span class="keyword">new</span> File(<span class="string">"D:/Use/rspic"</span> + <span class="string">"/"</span> + num + <span class="string">"--"</span> + tmp);</div><div class="line">					os = <span class="keyword">new</span> FileOutputStream(file);</div><div class="line">					bos = <span class="keyword">new</span> BufferedOutputStream(os);</div><div class="line">				&#125; <span class="keyword">catch</span> (FileNotFoundException e1) &#123;</div><div class="line">					<span class="comment">// TODO Auto-generated catch block</span></div><div class="line">					e1.printStackTrace();</div><div class="line">				&#125;</div><div class="line">				HttpEntity entity = response.getEntity();</div><div class="line">				InputStream inputStream = entity.getContent();</div><div class="line">				BufferedInputStream bis = <span class="keyword">new</span> BufferedInputStream(inputStream);</div><div class="line">				<span class="keyword">byte</span>[] temp = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">4096</span>];</div><div class="line">				<span class="keyword">int</span> count;</div><div class="line">				<span class="keyword">while</span> ((count = bis.read(temp)) != -<span class="number">1</span>) &#123;</div><div class="line">					<span class="keyword">byte</span>[] temp1 = <span class="keyword">new</span> <span class="keyword">byte</span>[count];</div><div class="line">					System.arraycopy(temp, <span class="number">0</span>, temp1, <span class="number">0</span>, count);</div><div class="line">					bos.write(temp1);</div><div class="line">				&#125;</div><div class="line">				bis.close();</div><div class="line">				bos.close();</div><div class="line">				System.out.println(num + <span class="string">"--"</span> + tmp.toString() + <span class="string">"保存成功"</span>);</div><div class="line">				<span class="keyword">break</span>;</div><div class="line">			<span class="keyword">default</span>:</div><div class="line">				System.out.println(<span class="string">"保存失败,图片链接是"</span> + urlString + <span class="string">"  页面地址是："</span> + imageName);</div><div class="line">			&#125;</div><div class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">			<span class="comment">// TODO Auto-generated catch block</span></div><div class="line">			e.printStackTrace();</div><div class="line">		&#125; <span class="keyword">finally</span> &#123;</div><div class="line">			<span class="keyword">if</span> (response != <span class="keyword">null</span>) &#123;</div><div class="line">				<span class="keyword">try</span> &#123;</div><div class="line">					response.close();</div><div class="line">				&#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">					<span class="comment">// TODO Auto-generated catch block</span></div><div class="line">					e.printStackTrace();</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			httpGet.abort();</div><div class="line">		&#125;</div><div class="line"></div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="获取所有想要的网页"><a href="#获取所有想要的网页" class="headerlink" title="获取所有想要的网页"></a>获取所有想要的网页</h2><p>  爬虫若是只能获取一个网页的连接上的图片就没有存在的必要了，我找到一些关于深度优先比例的爬虫的文章，即不停的从爬取的网页上找到所想要爬取的下一个页面的连接，不断地进行爬取，直到无法找到下一个网页，就像图论中的深度优先搜索一样，把网站也当成一个图来进行遍历，这种做法对静态网站十分好用，但是对动态网页来说效果往往不理想，但是我们可以通过想象动态网页对不同请求的反馈进行预计分析来获得相应所想要的网页就相当于静态网页了。我们校内网站睿思是使用PHP的动态网页，我观察了一下论坛首页上关于换页的网址格式，获得所有所有分页，保存在队列pageUrls，再从所有的分页中获取我想爬取的网页网址保存在另一个队列srcHtmlUrls，但这不算是深度优先遍历了，最后再从srcHtmlUrls这个list保存的链接中的网页中获取我想要的图片链接，将图片链接保存在picUrls中，然后就用写好的函数获取并保存这些图片就好了。源代码如下：</p>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">	BufferedReader br = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(System.in));</div><div class="line">	String srcUrl = br.readLine();</div><div class="line">	ArrayList&lt;String&gt; pageUrls = <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line">	ArrayList&lt;String&gt; srcHtmlUrls = <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line">	ArrayList&lt;String&gt; picUrls = <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line">	pageUrls = ParserHtml.getPageUrl(srcUrl);</div><div class="line">	System.out.println(<span class="string">"页面获取完成，共"</span> + pageUrls.size() + <span class="string">"个页面"</span>);</div><div class="line">	<span class="keyword">int</span> sortPicNum = <span class="number">1</span>;</div><div class="line">	<span class="keyword">for</span> (String pageUrl : pageUrls) &#123;</div><div class="line">		srcHtmlUrls = ParserHtml.getMainUrl(pageUrl, srcUrl, srcHtmlUrls);</div><div class="line">	&#125;</div><div class="line">	System.out.println(<span class="string">"页面链接获取完成，共"</span> + srcHtmlUrls.size() + <span class="string">"个页面"</span>);</div><div class="line">	<span class="keyword">for</span> (String srcHtmlUrl : srcHtmlUrls) &#123;</div><div class="line">		ArrayList&lt;String&gt; picUrlsTemp = ParserHtml.getPicture(srcHtmlUrl);</div><div class="line">		<span class="keyword">if</span> (!picUrlsTemp.isEmpty()) &#123;</div><div class="line">			<span class="keyword">for</span> (String picUrl : picUrlsTemp) &#123;</div><div class="line">				SavePicture.savePicetur(picUrl, srcHtmlUrl, sortPicNum);</div><div class="line">			&#125;</div><div class="line">			sortPicNum++;</div><div class="line">		&#125;</div><div class="line">    </div><div class="line">	&#125;</div><div class="line">	System.out.println(<span class="string">"图片链接获取完成，共"</span> + sortPicNum + <span class="string">"个图片"</span>);</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://runningping.github.io/ping.github.io/2017/10/13/Crawler/" data-title="Crawler | RunningPing" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/10/12/baiduyun/" title="BaiduyunpanSearch">
+  <strong>上一篇：</strong><br/>
+  <span>
+  BaiduyunpanSearch</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/10/14/MyBlog/"  title="MyBlog">
+ <strong>下一篇：</strong><br/> 
+ <span>MyBlog
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#爬虫"><span class="toc-number">1.</span> <span class="toc-text">爬虫</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取网页"><span class="toc-number">2.</span> <span class="toc-text">获取网页</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取图片"><span class="toc-number">3.</span> <span class="toc-text">获取图片</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取所有想要的网页"><span class="toc-number">4.</span> <span class="toc-text">获取所有想要的网页</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/algorithm/" title="algorithm">algorithm<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JSP-Servlet/" title="JSP&amp;Servlet">JSP&amp;Servlet<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Unclassified/" title="Unclassified">Unclassified<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=null&verifier=&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Larry Page in Google. <br/>
+			This is my blog,believe it or not.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2398935587" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="Ping">Ping</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
