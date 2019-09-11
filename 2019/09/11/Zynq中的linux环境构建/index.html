@@ -1,0 +1,499 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-cn">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Zedboard中的linux环境构建 | RunningPing</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Ping">
+    
+
+    
+    <meta name="description" content="前言arm开发板和树莓派等嵌入式系统的运行依赖四个部分，即引导程序bootloader，设备树文件devicetree.dtb，linux内核文件和文件系统，给此类开发板提供外设的驱动涉及到设备树和linux内核的设置，设备树文件设置了一些硬件设备的电气参数，linux内核提供了一些接口能够以模块加载的形式调用驱动，内核以上的程序通过调用相关接口便能通过内核调用驱动控制硬件。zedboard开发板">
+<meta name="keywords" content="zynq">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Zedboard中的linux环境构建">
+<meta property="og:url" content="https://runningping.github.io/ping.github.io/2019/09/11/Zynq中的linux环境构建/index.html">
+<meta property="og:site_name" content="RunningPing">
+<meta property="og:description" content="前言arm开发板和树莓派等嵌入式系统的运行依赖四个部分，即引导程序bootloader，设备树文件devicetree.dtb，linux内核文件和文件系统，给此类开发板提供外设的驱动涉及到设备树和linux内核的设置，设备树文件设置了一些硬件设备的电气参数，linux内核提供了一些接口能够以模块加载的形式调用驱动，内核以上的程序通过调用相关接口便能通过内核调用驱动控制硬件。zedboard开发板">
+<meta property="og:updated_time" content="2019-09-11T07:20:51.413Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Zedboard中的linux环境构建">
+<meta name="twitter:description" content="前言arm开发板和树莓派等嵌入式系统的运行依赖四个部分，即引导程序bootloader，设备树文件devicetree.dtb，linux内核文件和文件系统，给此类开发板提供外设的驱动涉及到设备树和linux内核的设置，设备树文件设置了一些硬件设备的电气参数，linux内核提供了一些接口能够以模块加载的形式调用驱动，内核以上的程序通过调用相关接口便能通过内核调用驱动控制硬件。zedboard开发板">
+
+    
+    <link rel="alternative" href="/atom.xml" title="RunningPing" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="RunningPing" title="RunningPing"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="RunningPing">RunningPing</a></h1>
+				<h2 class="blog-motto">biubiubiu</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:runningping.github.io/ping.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2019/09/11/Zynq中的linux环境构建/" title="Zedboard中的linux环境构建" itemprop="url">Zedboard中的linux环境构建</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Ping" target="_blank" itemprop="author">Ping</a>
+		
+  <p class="article-time">
+    <time datetime="2019-09-11T14:53:51.000Z" itemprop="datePublished"> 發表於 2019-09-11</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zedboard上构建linux环境"><span class="toc-number">2.</span> <span class="toc-text">zedboard上构建linux环境</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>arm开发板和树莓派等嵌入式系统的运行依赖四个部分，即引导程序bootloader，设备树文件devicetree.dtb，linux内核文件和文件系统，给此类开发板提供外设的驱动涉及到设备树和linux内核的设置，设备树文件设置了一些硬件设备的电气参数，linux内核提供了一些接口能够以模块加载的形式调用驱动，内核以上的程序通过调用相关接口便能通过内核调用驱动控制硬件。<br>zedboard开发板与此类开发板不同，zedboard是全可编程片上系统，其具有专用的中央处理器单元（arm）和可编程逻辑资源集成（FPGA）。可编程逻辑资源可以模拟一个处理器，称之为软核，但是相较于硬核arm来说性能太差不能满足嵌入式设备的相关需求。而在硬件上，arm与外设的连接改变困难，不能针对相关场景进行特殊化设计。两者结合可以灵活选择所需要的外设和控制器，通过AMBA总线相连，完成复杂的任务需求。同时FPGA具有强大的并行计算能力，可以实现各式的DSP和相关算法的优化，arm集合FPGA真正意义实现软硬结合，达到最好的性价比。其缺点也非常的明显，编程的难度相对单个设备增加很大。为了构建一个linux环境首先需要使用FPGA选择相关硬件（ip核），再将ip核连接到一起，最后得到最终的block，再编译加载SDK，使用交叉编译工具链编译得到可以运行的二进制代码，在开发板正常验证后才算是成功的block，利用这个block的硬比特流和uboot（嵌入式设备的启动程序（bootloader））结合才能生成最终的BootLoader，之后的运行和其他的嵌入式开发板类似。</p>
+<h2 id="zedboard上构建linux环境"><a href="#zedboard上构建linux环境" class="headerlink" title="zedboard上构建linux环境"></a>zedboard上构建linux环境</h2><ol>
+<li>本机系统即环境设置<ol>
+<li>win7和ubuntu 16.04LTS 64位虚拟机</li>
+<li>在本机以及虚拟机中安装vivado 2015.04<blockquote>
+<p>因为根据analog官方提供的GitHub项目对环境的需求，尝试了不同版本，最终以2015.04版本的vivado能够成功。vivado安装时选择注意器件支持选择所有器件，以支持analog提供的IP核。注意vivado安装包是支持多平台的，选择xsetup即可完成在linux中的安装。因为vivado安装包中可选sdk，在虚拟机安装该软件主要是为了获得适用的交叉编译工具链。</p>
+</blockquote>
+</li>
+<li>zedboard目前不用设置</li>
+</ol>
+</li>
+<li>构建硬件运行环境<br>因为本文参考官方例程<code>linux with HDMI video output on the zed, zc702 and zc706 boards</code>，硬件环境因为本人对FPGA设计不熟，使用官方设置的project，官方中此例程使用adv7511（HDMI例程），因此硬件环境与该例程相同<ol>
+<li>克隆官方所有例程的硬件设计项目，GitHub地址：<code>github.com/analogdevicesinc/hdl</code></li>
+<li>releases版本选择<code>hdl_2016_r1</code>，注意版本设置，不同的vivado以及SDK的交叉编译工具链之间兼容不好</li>
+<li>解压<code>hdl_2016_r1</code>，在<code>hdl_2016_r1/library/scripts/adi_ip.tcl</code>和<code>hdl_2016_r1/projects/scripts/</code>中的<code>adi_project.tcl</code>更改项目所需求的vivado的版本号。</li>
+<li>编译所需的ip核<br>运行Xilinx design tools中的<code>TCL shell</code>，分别进入目录<code>hdl_2016_r1/library/</code>下的<code>axi_clkgen</code>,<code>axi_hdmi_tx</code>,<code>axi_i2s_adi</code>,<code>axi_spdif_tx</code>,<code>util_i2c_mixer</code>文件夹并运行<code>source ./{\*}?_ip.tcl</code>(用文件夹名替换{*}?)</li>
+<li>构建项目adv7511<br>打开vivado，在<code>tcl console</code>输入<code>source hdl_2016_r1/projects/adv7511/zed/system_project.tcl</code>，等待项目构建完成，terminal没有报错即构建完成</li>
+<li>生成BOOT.bin<br>启动<code>file-&gt;lanuchSDK</code>，新建项目选择，项目选择为zynq FSBL，build项目，等待编译完成后打开<code>Xilinx Tools</code>菜单选择<code>Create Zynq Boot Image</code>开始创建<code>BOOT.bin</code>,设置output的路径，用于保存输出的boot.bin，然后点击add，添加fsbl.elf和system_top.bit、u-boot.elf文件，其中fsbl.elf和system_top.bit是vivado根据项目adv7511生成与编译的硬比特流文件。u-boot.elf在下文中编译生成</li>
+</ol>
+</li>
+<li>编译u-boot<ol>
+<li>ubuntu系统在安装完成vivado后，会有一个文件夹sdk，进入该文件夹中的2015.04，运行settings64.sh脚本，<code>source settings64.sh</code>，在该terminal中就会有<code>arm-xilinx-linux-gnueabi-</code>环境变量</li>
+<li>下载u-boot源文件，GitHub地址:<code>github.com/Xilinx/u-boot-xlnx</code>，release版本选择v2016.4</li>
+<li>安装选择设备树编译器<code>apt-get install device-tree-complier</code></li>
+<li>设置环境变量<br><code>export ARCH=arm</code><br><code>export CROSS_COMPILE=arm-xilinx-linux-gnueabi-</code></li>
+<li>更改启动初始设置<br>在文件<code>/u-boot-xlnx/include/configs/zynq-common.h</code>修改：<pre><code>&quot;sdboot=if mmcinfo; then &quot; \
+    &quot;run uenvboot; &quot; \
+    &quot;echo Copying Linux from SD to RAM... &amp;&amp; &quot; \
+    &quot;load mmc 0 ${kernel_load_address} ${kernel_image} &amp;&amp; &quot; \
+    &quot;load mmc 0 ${devicetree_load_address} ${devicetree_image} &amp;&amp; &quot; \
+    &quot;bootm ${kernel_load_address} - ${devicetree_load_address}; &quot; \
+</code></pre></li>
+<li>编译<br><code>make zynq_zed_defconfig</code></li>
+<li>为了后续能够在编译内核时自动生成<code>uImage</code>文件，需要将<code>u-boot-xlnx/tools</code>文件夹下的<code>mkimage</code>，<code>mkimage.c</code>,<code>mkimage.o</code>,<code>mkimage.h</code>一起复制到<code>/usr/sbin</code>目录中</li>
+<li>在<code>u-boot-xlnx</code>目录中的uboot即为步骤2中所需的<code>uboot.elf</code>文件，重命名即可</li>
+</ol>
+</li>
+<li>linux内核编译<ol>
+<li>类似步骤3中的第一步，添加交叉编译工具链的环境变量</li>
+<li>类似步骤3中的第四步，添加相关环境变量</li>
+<li>编译<br><code>make zynq_xcomm_adv7511_defconfig</code><br><code>make uImage LOADADDR=0x8000</code><br>编译完成后在<code>arch/arm/boot</code>会生成编译好的<code>uImage</code>文件</li>
+<li>生成设备树文件<br><code>make zynq-zed-adv7511.dtb</code><br>在<code>zynq/arch/arm/boot/dtc</code>生成了该文件  </li>
+</ol>
+</li>
+<li>运行linaro系统<ol>
+<li>将一张至少为4G的存储卡分区，一个区设置为50m，文件系统选择fat32，命名选择为boot，一个区设置为大于3G的部分，文件系统为ext4，命名选择rootfs</li>
+<li>将4中生成的<code>uImage</code>，<code>devicetree.dtb</code>（改名自<code>zynq-zed-adv7511.dtb</code>）和2中的<code>BOOT.bin</code>拷贝到boot中</li>
+<li>rootfs中放置linaro文件系统，下载地址<code>releases.linaro.org/archive/12.09/ubuntu</code></li>
+</ol>
+</li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/zynq/">zynq</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://runningping.github.io/ping.github.io/2019/09/11/Zynq中的linux环境构建/" data-title="Zedboard中的linux环境构建 | RunningPing" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2019/01/04/FDS/" title="FDS">
+  <strong>上一篇：</strong><br/>
+  <span>
+  FDS</span>
+</a>
+</div>
+
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zedboard上构建linux环境"><span class="toc-number">2.</span> <span class="toc-text">zedboard上构建linux环境</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/algorithm/" title="algorithm">algorithm<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JSP-Servlet/" title="JSP&amp;Servlet">JSP&amp;Servlet<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Unclassified/" title="Unclassified">Unclassified<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/mathematical-logic/" title="mathematical logic">mathematical logic<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/zynq/" title="zynq">zynq<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=null&verifier=&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Larry Page in Google. <br/>
+			This is my blog,believe it or not.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2398935587" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019 
+		
+		<a href="/about" target="_blank" title="Ping">Ping</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
