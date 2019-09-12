@@ -44,7 +44,7 @@
 				<h1 class="site-name"><a href="/" title="RunningPing">RunningPing</a></h1>
 				<h2 class="blog-motto">biubiubiu</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -60,7 +60,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:runningping.github.io/ping.github.io">
 					</form>
 					
@@ -75,12 +75,14 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/09/11/Zynq中的linux环境构建/" title="Zedboard中的linux环境构建" itemprop="url">
+    <a href="/2019/09/11/linux内核与驱动编译的关系/" title="linux内核与驱动编译的关系" itemprop="url">
   
-    <h1 itemprop="name">Zedboard中的linux环境构建</h1>
+    <h1 itemprop="name">linux内核与驱动编译的关系</h1>
     
      
-           <p itemprop="description" >前言arm开发板和树莓派等嵌入式系统的运行依赖四个部分，即引导程序bootloader，设备树文件devicetree.dtb，linux内核文件和文件系统，给此类开发板提供外设的驱动涉及到设备树和linux内核的设置，设备树文件设置了一些硬件设备的电气参数，linux内核提供了</p>
+           <p itemprop="description" >前言内核是一个操作系统的核心，它负责管理系统的任务调度、内存分配、进程管理、文件系统，网络系统，设备驱动程序等。为了正确合理的设置内核编译配置选项，从而只编译系统需要的功能的代码，一般主要有下面3个考虑。
+1. 自己定制编译的内核运行更快
+2. 系统将拥有更多的内存，内核部分将不</p>
         
     
     <time datetime="2019-09-11T14:53:51.000Z" itemprop="datePublished">2019-09-11</time>
@@ -95,14 +97,12 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/09/11/linux内核与驱动编译的关系/" title="linux内核与驱动编译的关系" itemprop="url">
+    <a href="/2019/09/11/Zynq中的linux环境构建/" title="Zedboard中的linux环境构建" itemprop="url">
   
-    <h1 itemprop="name">linux内核与驱动编译的关系</h1>
+    <h1 itemprop="name">Zedboard中的linux环境构建</h1>
     
      
-           <p itemprop="description" >前言内核是一个操作系统的核心，它负责管理系统的任务调度、内存分配、进程管理、文件系统，网络系统，设备驱动程序等。为了正确合理的设置内核编译配置选项，从而只编译系统需要的功能的代码，一般主要有下面4个考虑。
-1. 自己定制编译的内核运行更快
-2. 系统将拥有更多的内存，内核部分将不</p>
+           <p itemprop="description" >前言arm开发板和树莓派等嵌入式系统的运行依赖四个部分，即引导程序bootloader，设备树文件devicetree.dtb，linux内核文件和文件系统，给此类开发板提供外设的驱动涉及到设备树和linux内核的设置，设备树文件设置了一些硬件设备的电气参数，linux内核提供了</p>
         
     
     <time datetime="2019-09-11T14:53:51.000Z" itemprop="datePublished">2019-09-11</time>
@@ -284,10 +284,10 @@ impo</p>
 
 
 </div>
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
@@ -297,15 +297,15 @@ impo</p>
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/algorithm/" title="algorithm">algorithm<sup>2</sup></a></li>
+				<li><a href="/tags/Java/" title="Java">Java<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Java/" title="Java">Java<sup>2</sup></a></li>
+				<li><a href="/tags/algorithm/" title="algorithm">algorithm<sup>2</sup></a></li>
 			
 		
 			
@@ -329,7 +329,7 @@ impo</p>
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情链接</p>
+  <p class="asidetitle">Links</p>
     <ul>
         
     </ul>
@@ -339,11 +339,11 @@ impo</p>
 
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
 </div>
 
   <div class="weiboshow">
-  <p class="asidetitle">新浪微博</p>
+  <p class="asidetitle">Weibo</p>
     <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=null&verifier=&dpc=1"></iframe>
 </div>
 
@@ -483,7 +483,7 @@ $(document).ready(function(){
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
