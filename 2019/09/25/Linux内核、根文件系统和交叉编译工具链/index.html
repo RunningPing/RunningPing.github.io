@@ -1,0 +1,483 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-cn">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Linux内核、根文件系统和交叉编译工具链 | RunningPing</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Ping">
+    
+
+    
+    <meta name="description" content="嵌入式平台启动嵌入式linux系统时的过程如下所示：  BootLoader启动于RAM的初始地址，是系统启动或复位以后执行的第一段代码，它主要用来初始化处理器以及外设。其根据其编译时配置的编译头文件设置相关启动选项，与本文相关的有内核(uImage)的加载地址和入口地址和设备树文件，设备树文件描述了文件系统的位置以及相关硬件的具体位置，以便内核和系统程序能够使用。 加载内核到指定的RAM位置中，">
+<meta name="keywords" content="zynq">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux内核、根文件系统和交叉编译工具链">
+<meta property="og:url" content="https://runningping.github.io/ping.github.io/2019/09/25/Linux内核、根文件系统和交叉编译工具链/index.html">
+<meta property="og:site_name" content="RunningPing">
+<meta property="og:description" content="嵌入式平台启动嵌入式linux系统时的过程如下所示：  BootLoader启动于RAM的初始地址，是系统启动或复位以后执行的第一段代码，它主要用来初始化处理器以及外设。其根据其编译时配置的编译头文件设置相关启动选项，与本文相关的有内核(uImage)的加载地址和入口地址和设备树文件，设备树文件描述了文件系统的位置以及相关硬件的具体位置，以便内核和系统程序能够使用。 加载内核到指定的RAM位置中，">
+<meta property="og:updated_time" content="2019-09-27T05:37:14.818Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux内核、根文件系统和交叉编译工具链">
+<meta name="twitter:description" content="嵌入式平台启动嵌入式linux系统时的过程如下所示：  BootLoader启动于RAM的初始地址，是系统启动或复位以后执行的第一段代码，它主要用来初始化处理器以及外设。其根据其编译时配置的编译头文件设置相关启动选项，与本文相关的有内核(uImage)的加载地址和入口地址和设备树文件，设备树文件描述了文件系统的位置以及相关硬件的具体位置，以便内核和系统程序能够使用。 加载内核到指定的RAM位置中，">
+
+    
+    <link rel="alternative" href="/atom.xml" title="RunningPing" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="RunningPing" title="RunningPing"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="RunningPing">RunningPing</a></h1>
+				<h2 class="blog-motto">biubiubiu</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:runningping.github.io/ping.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2019/09/25/Linux内核、根文件系统和交叉编译工具链/" title="Linux内核、根文件系统和交叉编译工具链" itemprop="url">Linux内核、根文件系统和交叉编译工具链</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Ping" target="_blank" itemprop="author">Ping</a>
+		
+  <p class="article-time">
+    <time datetime="2019-09-25T05:35:46.000Z" itemprop="datePublished"> Published 2019-09-25</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux内核"><span class="toc-number">1.</span> <span class="toc-text">Linux内核</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#根文件系统"><span class="toc-number">2.</span> <span class="toc-text">根文件系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内核与文件系统的关系"><span class="toc-number">3.</span> <span class="toc-text">内核与文件系统的关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#交叉编译工具链"><span class="toc-number">4.</span> <span class="toc-text">交叉编译工具链</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#armel、armhf和arm64区别选择"><span class="toc-number">4.1.</span> <span class="toc-text">armel、armhf和arm64区别选择</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<p>嵌入式平台启动嵌入式linux系统时的过程如下所示：</p>
+<ol>
+<li>BootLoader启动于RAM的初始地址，是系统启动或复位以后执行的第一段代码，它主要用来初始化处理器以及外设。其根据其编译时配置的编译头文件设置相关启动选项，与本文相关的有内核(uImage)的加载地址和入口地址和设备树文件，设备树文件描述了文件系统的位置以及相关硬件的具体位置，以便内核和系统程序能够使用。</li>
+<li>加载内核到指定的RAM位置中，启动内核，并且按照设备树文件描述挂载根文件系统</li>
+<li>按照文件系统中的设置启动相关程序。</li>
+</ol>
+<p>PS：本人使用的Zynq所编译的uboot版本指定的内核加载地址0x2080000，然而编译时指定的内核加载地址为0x00008000，结果程序运行时内核启动正常，观察配置头文件时发现，所设置的内核加载地址与其他文件地址不冲突，致使启动正常，若设置为0x2080000不知是否启动正常</p>
+<h2 id="Linux内核"><a href="#Linux内核" class="headerlink" title="Linux内核"></a>Linux内核</h2><p>内核是一个操作系统的核心,它负责管理系统的进程，内存，设备驱动程序，文件和网络系统，决定着系统的性能和稳定性。内核以独占的方式执行最底层任务，保证系统正常运行。协调多个并发进程，管理进程使用的内存，使它们相互之间不产生冲突,满足进程访问磁盘的请求等.操作系统是一个用来和硬件打交道并为用户程序提供一个有限服务集的低级支撑软件。一个计算机系统是一个硬件和软件的共生体，它们互相依赖，不可分割。计算机的硬件，含有外围设备、处理器、内存、硬盘和其他的电子设备组成计算机的发动机。但是没有软件来操作和控制它，自身是不能工作的。完成这个控制工作的软件就称为操作系统，在Linux的术语中被称为“内核”，也可以称为“核心”。Linux内核的主要模块（或组件）分以下几个部分：存储管理、CPU和进程管理、文件系统、设备管理和驱动、网络通信，以及系统的初始化（引导）、系统调用等。内核在启动时需要加载进入内存中执行。</p>
+<h2 id="根文件系统"><a href="#根文件系统" class="headerlink" title="根文件系统"></a>根文件系统</h2><p>根文件系统首先是一种文件系统，该文件系统不仅具有普通文件系统的存储数据文件的功能，但是相对于普通的文件系统，它的特殊之处在于，它是内核启动时所挂载（mount）的第一个文件系统，内核代码的映像文件保存在根文件系统中，系统引导启动程序会在根文件系统挂载之后从中把一些初始化脚本（如rcS,inittab）和服务加载到内存中去运行。我们要明白文件系统和内核是完全独立的两个部分。在嵌入式中移植的内核下载到开发板上，是没有办法真正的启动Linux操作系统的，会出现无法加载文件系统的错误。<br>那么根文件系统在系统启动中到底是什么时候挂载的呢？先将/dev/ram0挂载，而后执行/linuxrc.等其执行完后。切换根目录，再挂载具体的根文件系统.根文件系统执行完之后，也就是到了Start_kernel()函数的最后，执行init的进程，也就第一个用户进程。对系统进行各种初始化的操作。<br>根文件系统之所以在前面加一个”根“，说明它是加载其它文件系统的”根“，既然是根的话，那么如果没有这个根，其它的文件系统也就没有办法进行加载的。它包含系统引导和使其他文件系统得以挂载（mount）所必要的文件。根文件系统包括Linux启动时所必须的目录和关键性的文件，例如Linux启动时都需要有init目录下的相关文件，在 Linux挂载分区时Linux一定会找/etc/fstab这个挂载文件等，根文件系统中还包括了许多的应用程序bin目录等，任何包括这些Linux系统启动所必须的文件都可以成为根文件系统。Linux启动时，第一个必须挂载的是根文件系统；若系统不能从指定设备上挂载根文件系统，则系统会出错而退出启动。成功之后可以自动或手动挂载其他的文件系统。因此，一个系统中可以同时存在不同的文件系统。在 Linux 中将一个文件系统与一个存储设备关联起来的过程称为挂载（mount）。使用 mount 命令将一个文件系统附着到当前文件系统层次结构中（根）。在执行挂装时，要提供文件系统类型、文件系统和一个挂装点。根文件系统被挂载到根目录下“/”上后，在根目录下就有根文件系统的各个目录，文件：/bin /sbin /mnt等，再将其他分区挂接到/mnt目录上，/mnt目录下就有这个分区的各个目录、文件。</p>
+<h2 id="内核与文件系统的关系"><a href="#内核与文件系统的关系" class="headerlink" title="内核与文件系统的关系"></a>内核与文件系统的关系</h2><p>技术上说Linux是一个内核。“内核”指的是一个提供硬件抽象层、磁盘及文件系统控制、多任务等功能的系统软件。一个内核不是一套完整的操作系统。一套基于Linux内核的完整操作系统叫作Linux操作系统，或是GNU/Linux。<br>文件系统是kernel的一部分。文件系统实现了系统上存储介质和其他资源的交互。kernel tree中的fs目录都是关于文件系统的，可以说它是kernel的一个大子系统。<br>嵌入式系统在flash中分配了存放内核、根文件系统的区域。bootloader加载了内核，内核启动，加载文件系统，进入Linux系统。<br>整个嵌入式系统而言，可以分为三个部分1.uboot 2.kernel 3.文件系统。其中kernel中以VFS去支持各种文件系统，如yaffs，ext3，cramfs等等。yaffs/yaffs2是专为嵌入式系统使用NAND型闪存而设计的一种日志型文件系统。在内核中以VFS来屏蔽各种文件系统的接口不同，以VFS向kernel提供一个统一的接口。如打开一个文件时统一使用open，写时采用write，而不用去考虑是那种文件系统，也不用去考虑文件系统是如何将数据写入物理介质的。其中 kernel中的配置，只是让VFS支持这种接口。</p>
+<h2 id="交叉编译工具链"><a href="#交叉编译工具链" class="headerlink" title="交叉编译工具链"></a>交叉编译工具链</h2><p>在当前编译平台下编译能够运行在体系结构不同的另一种目标平台上。交叉编译需要注意主机环境与目标环境不同，因此我们在主机编译相关程序时需要注意相关软件会通过读取环境变量的方式控制编译，因此我们需要更改当前终端的相关选项或编译时传入相关参数控制编译过程。</p>
+<p>交叉编译的命名规则：<br>交叉编译工具链的命名规则为：<code>arch [-vendor] [-os] [-(gnu)eabi]</code></p>
+<ul>
+<li>arch - 体系架构，如ARM，MIPS</li>
+<li>vendor - 工具链提供商</li>
+<li>os - 目标操作系统</li>
+<li>eabi - 嵌入式应用二进制接口（Embedded Application Binary Interface）</li>
+</ul>
+<h3 id="armel、armhf和arm64区别选择"><a href="#armel、armhf和arm64区别选择" class="headerlink" title="armel、armhf和arm64区别选择"></a>armel、armhf和arm64区别选择</h3><ul>
+<li>armel：（arm eabi little endian）也即softfp，用fpu计算，但是传参数用普通寄存器传，这样中断的时候，只需要保存普通寄存器，中断负荷小，但是参数需要转换成浮点的再计算。</li>
+<li>armhf：（arm hard float）也即hard，用fpu计算，传参数用fpu中的浮点寄存器传，省去了转换性能最好，但是中断负荷高。</li>
+<li>arm64：64位的arm默认就是hard float的，因此不需要hf的后缀。</li>
+</ul>
+<p>其中kernel、rootfs和app编译的时候，指定的必须保持一致才行。</p>
+<p>arm-linux-gnueabihf-gcc对应armhf，其gcc编译选项-mfloat-abi=hard<br>arm-linux-gnueabi-gcc对应armel，其gcc编译选项-mfloat-abi=softfp</p>
+<p>PS：奇怪的是在构建zedboard的linux系统时，本人在编译kernel使用的是arm-linux-gnueabi-gcc，然后使用该编译工具编译网卡驱动时能够运行该模块，只是不能完整实现所有无线功能，因此能够得出交叉编译工具链编译内核相关程序时正常使用。但是本人选择了linaro的文件系统，linaro在2012年底开始不支持armel的交叉编译工具链，此文件系统使用的是armhf。我在使用arm-linux-gnueabi-gcc编译的程序无法在构建的linux系统中正常运行，然而使用arm-linux-gnueabihf-gcc编译的程序能够运行。所以我认为kernel与文件系统工具链不同时应该是能够运行的，只是与内核相关的需要使用armel，内核以上的编程使用armhf。</p>
+<p>最后需要注意的是gcc编译选项的问题很关键。<br>其中记录此处关于c语言标准的一个问题。C语言的标准有c89和c99，但是posix指定的操作系统标准并不在C语言标准中。gcc默认使用的标准gnu89，其指定的标准为c89和比较老旧的posix标准，因此在使用到较新的标准时，需要使用gnu99，指定c99标准是是没有用的，POSIX相关函数会报错。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/zynq/">zynq</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://runningping.github.io/ping.github.io/2019/09/25/Linux内核、根文件系统和交叉编译工具链/" data-title="Linux内核、根文件系统和交叉编译工具链 | RunningPing" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2019/09/11/linux内核与驱动编译的关系/" title="linux内核与驱动编译的关系">
+  <strong>上一篇：</strong><br/>
+  <span>
+  linux内核与驱动编译的关系</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2019/09/27/gcc中的编译与运行/"  title="gcc中的编译与运行">
+ <strong>下一篇：</strong><br/> 
+ <span>gcc中的编译与运行
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux内核"><span class="toc-number">1.</span> <span class="toc-text">Linux内核</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#根文件系统"><span class="toc-number">2.</span> <span class="toc-text">根文件系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内核与文件系统的关系"><span class="toc-number">3.</span> <span class="toc-text">内核与文件系统的关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#交叉编译工具链"><span class="toc-number">4.</span> <span class="toc-text">交叉编译工具链</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#armel、armhf和arm64区别选择"><span class="toc-number">4.1.</span> <span class="toc-text">armel、armhf和arm64区别选择</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/zynq/" title="zynq">zynq<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/algorithm/" title="algorithm">algorithm<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JSP-Servlet/" title="JSP&amp;Servlet">JSP&amp;Servlet<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Unclassified/" title="Unclassified">Unclassified<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/mathematical-logic/" title="mathematical logic">mathematical logic<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=null&verifier=&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Larry Page in Google. <br/>
+			This is my blog,believe it or not.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2398935587" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019 
+		
+		<a href="/about" target="_blank" title="Ping">Ping</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

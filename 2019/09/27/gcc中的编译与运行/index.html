@@ -4,24 +4,24 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>linux内核与驱动编译的关系 | RunningPing</title>
+    <title>gcc中的编译与运行 | RunningPing</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Ping">
     
 
     
-    <meta name="description" content="前言内核是一个操作系统的核心，它负责管理系统的任务调度、内存分配、进程管理、文件系统，网络系统，设备驱动程序等。为了正确合理的设置内核编译配置选项，从而只编译系统需要的功能的代码，一般主要有下面3个考虑。 1. 自己定制编译的内核运行更快 2. 系统将拥有更多的内存，内核部分将不会被交换到虚拟内存中 3. 将某种功能编译进入内核方式可能会比编译到内核内的方式速度要慢一些 如果要增加某部分功能的支持">
+    <meta name="description" content="概述gcc将程序由c语言编译成可执行的二进制编码需要通过下面四个步骤：  编译：将C代码翻译成为平台相关的机器指令 链接：跨模块调用函数，访问变量 装载：建立起可执行文件、虚拟地址、物理地址的映射关系 执行：指令执行  编译编译的步骤如下所示：词法分析、语法分析、语义分析、中间代码生成和优化、目标代码生成和优化，编译后，与平台无关的高级语言就会翻译成与平台先关的机器指令。 链接将编译得到的不同模块">
 <meta name="keywords" content="zynq">
 <meta property="og:type" content="article">
-<meta property="og:title" content="linux内核与驱动编译的关系">
-<meta property="og:url" content="https://runningping.github.io/ping.github.io/2019/09/11/linux内核与驱动编译的关系/index.html">
+<meta property="og:title" content="gcc中的编译与运行">
+<meta property="og:url" content="https://runningping.github.io/ping.github.io/2019/09/27/gcc中的编译与运行/index.html">
 <meta property="og:site_name" content="RunningPing">
-<meta property="og:description" content="前言内核是一个操作系统的核心，它负责管理系统的任务调度、内存分配、进程管理、文件系统，网络系统，设备驱动程序等。为了正确合理的设置内核编译配置选项，从而只编译系统需要的功能的代码，一般主要有下面3个考虑。 1. 自己定制编译的内核运行更快 2. 系统将拥有更多的内存，内核部分将不会被交换到虚拟内存中 3. 将某种功能编译进入内核方式可能会比编译到内核内的方式速度要慢一些 如果要增加某部分功能的支持">
-<meta property="og:updated_time" content="2019-09-12T02:22:44.338Z">
+<meta property="og:description" content="概述gcc将程序由c语言编译成可执行的二进制编码需要通过下面四个步骤：  编译：将C代码翻译成为平台相关的机器指令 链接：跨模块调用函数，访问变量 装载：建立起可执行文件、虚拟地址、物理地址的映射关系 执行：指令执行  编译编译的步骤如下所示：词法分析、语法分析、语义分析、中间代码生成和优化、目标代码生成和优化，编译后，与平台无关的高级语言就会翻译成与平台先关的机器指令。 链接将编译得到的不同模块">
+<meta property="og:updated_time" content="2019-09-27T05:37:55.979Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="linux内核与驱动编译的关系">
-<meta name="twitter:description" content="前言内核是一个操作系统的核心，它负责管理系统的任务调度、内存分配、进程管理、文件系统，网络系统，设备驱动程序等。为了正确合理的设置内核编译配置选项，从而只编译系统需要的功能的代码，一般主要有下面3个考虑。 1. 自己定制编译的内核运行更快 2. 系统将拥有更多的内存，内核部分将不会被交换到虚拟内存中 3. 将某种功能编译进入内核方式可能会比编译到内核内的方式速度要慢一些 如果要增加某部分功能的支持">
+<meta name="twitter:title" content="gcc中的编译与运行">
+<meta name="twitter:description" content="概述gcc将程序由c语言编译成可执行的二进制编码需要通过下面四个步骤：  编译：将C代码翻译成为平台相关的机器指令 链接：跨模块调用函数，访问变量 装载：建立起可执行文件、虚拟地址、物理地址的映射关系 执行：指令执行  编译编译的步骤如下所示：词法分析、语法分析、语义分析、中间代码生成和优化、目标代码生成和优化，编译后，与平台无关的高级语言就会翻译成与平台先关的机器指令。 链接将编译得到的不同模块">
 
     
     <link rel="alternative" href="/atom.xml" title="RunningPing" type="application/atom+xml">
@@ -81,14 +81,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2019/09/11/linux内核与驱动编译的关系/" title="linux内核与驱动编译的关系" itemprop="url">linux内核与驱动编译的关系</a>
+      <a href="/2019/09/27/gcc中的编译与运行/" title="gcc中的编译与运行" itemprop="url">gcc中的编译与运行</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Ping" target="_blank" itemprop="author">Ping</a>
 		
   <p class="article-time">
-    <time datetime="2019-09-11T14:53:51.000Z" itemprop="datePublished"> Published 2019-09-11</time>
+    <time datetime="2019-09-27T05:37:02.000Z" itemprop="datePublished"> Published 2019-09-27</time>
     
   </p>
 </header>
@@ -97,21 +97,32 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WiFi驱动配置"><span class="toc-number">2.</span> <span class="toc-text">WiFi驱动配置</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编译"><span class="toc-number">2.</span> <span class="toc-text">编译</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#链接"><span class="toc-number">3.</span> <span class="toc-text">链接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gcc链接选项"><span class="toc-number">4.</span> <span class="toc-text">gcc链接选项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#装载"><span class="toc-number">5.</span> <span class="toc-text">装载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#执行"><span class="toc-number">6.</span> <span class="toc-text">执行</span></a></li></ol>
 		
 		</div>
 		
-		<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>内核是一个操作系统的核心，它负责管理系统的任务调度、内存分配、进程管理、文件系统，网络系统，设备驱动程序等。<br>为了正确合理的设置内核编译配置选项，从而只编译系统需要的功能的代码，一般主要有下面3个考虑。</p>
-<pre><code>1. 自己定制编译的内核运行更快
-2. 系统将拥有更多的内存，内核部分将不会被交换到虚拟内存中
-3. 将某种功能编译进入内核方式可能会比编译到内核内的方式速度要慢一些
-</code></pre><p>如果要增加某部分功能的支持，可以吧响应部分驱动编译到内核中(build-in)，也可以把该部分驱动编译成模块(module)动态加载，如果编译到内核中，内核启动时就可以自动支持相应部分的功能，如果编译成模块就会生成对应的.ko文件，在使用的时候可以动态加载。</p>
-<h2 id="WiFi驱动配置"><a href="#WiFi驱动配置" class="headerlink" title="WiFi驱动配置"></a>WiFi驱动配置</h2><p>手中的无线网卡芯片有MT7601u, RTL8192eu,RTL8192cu,RL3070,其中MT7601u和RTL8192cu,RL3070内核中存在驱动，在编译内核时设置编译选项后能够直接使zedboard开发板支持。WiFi模块的运行不仅需要驱动，同样需要firmware文件，该类文件需要从其他ubuntu系统中获得，放在文件系统的/lib/firmware目录下。driver与firmware的关系如下所示：</p>
-<blockquote>
-<p>驱动和固件（firmware）都是代码，前者为软件服务，后者为硬件服务。在操作系统概念还不明确的时代，二者是没有明显区别的。<br>但是随着计算机体系结构的发展，硬件的种类开始变多，操作系统的种类也变多了。这个时候，因为各种技术的、商业的原因，硬件厂商希望自己的硬件能被更多的软件厂商使用，所以就需要在硬件之上做一些封装，让自己的硬件操纵起来更容易，这个时候就要有firmware这种东西了，它简化了软件与硬件的交互。在嵌入式系统里，一般都不限制直接操作IO端口。所以，硬件厂商一方面为了自己的硬件能被软件更简单的使用，就需要写firmware，而另一方面为了兼容各种操作系统，又不能把firmware写的太死，必须预留足够的余地让软件自由发挥——软件的自由发挥就是驱动。</p>
-</blockquote>
-<p>最后尝试交叉编译RTL8192eu的开源linux驱动，开源的linux驱动应该将firmware和driver合为一体，编译成功后加载模块便能直接支持无线网卡。然而不明原因，最后编译失败，可能是由于驱动编写不规范的原因导致，也可能是因为我编译时的设置问题。</p>
-<p>WiFi模块的启用。<br>使用wpa_supplicant连接WiFi<br><code>ifconfig -a</code>查看所有网络接口<br><code>ifconfig [wlan] up</code>启用无线网络接口<br><code>iwconfig -a</code>查看所有网络接口对无线的支持<br><code>iwlist [wlan] scan</code>扫描无线网络<br><code>wpa_passphrase [ssid_name]</code>生成配置文件<br><code>wpa_supplicant -B -i[wlan] -c[.conf]</code>启动WiFi连接<br><code>dhclient [wlan]</code>获得ip地址</p>
+		<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>gcc将程序由c语言编译成可执行的二进制编码需要通过下面四个步骤：</p>
+<ol>
+<li>编译：将C代码翻译成为平台相关的机器指令</li>
+<li>链接：跨模块调用函数，访问变量</li>
+<li>装载：建立起可执行文件、虚拟地址、物理地址的映射关系</li>
+<li>执行：指令执行</li>
+</ol>
+<h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><p>编译的步骤如下所示：词法分析、语法分析、语义分析、中间代码生成和优化、目标代码生成和优化，编译后，与平台无关的高级语言就会翻译成与平台先关的机器指令。</p>
+<h2 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h2><p>将编译得到的不同模块机器指令链接在一起。源码编译出来的包括机器指令代码和数据。其中链接时需要的相关信息：符号表，调试信息，字符串。所有信息分段存储：代码端、数据段、BSS端、符号表、重定位表、其他段。链接的主要任务就是合并目标文件。链接分为静态链接和动态链接，前者在编译时完成链接，后者在运行时按需执行链接工作。链接主要包括空间和地址分配，符号决议，重定位。链接完毕后，数据访问、指令跳转的目标虚拟地址都确定了。</p>
+<h2 id="gcc链接选项"><a href="#gcc链接选项" class="headerlink" title="gcc链接选项"></a>gcc链接选项</h2><ol>
+<li>-L：链接库时寻找的库目录，其优先级高于环境变量和系统默认路径，其为编译时的参考，不影响程序执行时的路径</li>
+<li>-rpath:程序运行时加载库的寻找目录，优先级最高，交叉编译时需要配置选项–with-sysroot</li>
+<li>-rpath-link：链接时程序寻找的相关库的依赖库目录。</li>
+</ol>
+<h2 id="装载"><a href="#装载" class="headerlink" title="装载"></a>装载</h2><p>装载建立起可执行文件，虚拟地址，物理地址的映射关系，页错误处理是核心。操作系统使用页映射的方式装载可执行程序，过程分为三步：</p>
+<ol>
+<li>创建进程的虚拟地址空间，实际上是创建虚拟地址（程序中所使用的地址）到物理地址（内存硬件的地址）的映射数据机构（页目录），用于后续保存映射关系；</li>
+<li>读取可执行文件头，建立虚拟地址空间与可执行文件的的映射关系</li>
+<li>将CPU执行寄存器设置为可执行文件的入口，启动运行。</li>
+<li>程序运行后，所映射的页面没有被加载到内存中，就会除法一次页错误，系统暂停执行，操作系统把对应的可执行文件内容加载到内存，把该页面的虚拟地址和物理地址的映射关系保存在页目录中，恢复执行。</li>
+</ol>
+<h2 id="执行"><a href="#执行" class="headerlink" title="执行"></a>执行</h2><p>一个进程的虚拟地址空间大致可以分为这几种：代码，数据，堆（向上/高地址扩展），栈（向下/低地址扩展）。栈是函数调用的核心，x86中栈顶由esp寄存器保存。栈内保存了一次函数调用所需维护的信息，称之为栈帧，其中包括：函数的参数和返回地址、保存的上下文（函数调用前后需要保持不变的寄存器）、临时变量（非静态局部变量，编译器生成的临时变量）、esp（栈顶）、ebp（函数返回指针+4）。<br>函数调用惯例：参数的传递顺序和方式、栈的维护方式（弹出参数）；名字修饰的策略。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -129,7 +140,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://runningping.github.io/ping.github.io/2019/09/11/linux内核与驱动编译的关系/" data-title="linux内核与驱动编译的关系 | RunningPing" data-tsina="null" class="share clearfix">
+	  <div data-url="https://runningping.github.io/ping.github.io/2019/09/27/gcc中的编译与运行/" data-title="gcc中的编译与运行 | RunningPing" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -143,21 +154,13 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2019/09/11/Zynq中的linux环境构建/" title="Zedboard中的linux环境构建">
+ <a href="/2019/09/25/Linux内核、根文件系统和交叉编译工具链/" title="Linux内核、根文件系统和交叉编译工具链">
   <strong>上一篇：</strong><br/>
   <span>
-  Zedboard中的linux环境构建</span>
+  Linux内核、根文件系统和交叉编译工具链</span>
 </a>
 </div>
 
-
-<div class="next">
-<a href="/2019/09/25/Linux内核、根文件系统和交叉编译工具链/"  title="Linux内核、根文件系统和交叉编译工具链">
- <strong>下一篇：</strong><br/> 
- <span>Linux内核、根文件系统和交叉编译工具链
-</span>
-</a>
-</div>
 
 </nav>
 
@@ -169,7 +172,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WiFi驱动配置"><span class="toc-number">2.</span> <span class="toc-text">WiFi驱动配置</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编译"><span class="toc-number">2.</span> <span class="toc-text">编译</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#链接"><span class="toc-number">3.</span> <span class="toc-text">链接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gcc链接选项"><span class="toc-number">4.</span> <span class="toc-text">gcc链接选项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#装载"><span class="toc-number">5.</span> <span class="toc-text">装载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#执行"><span class="toc-number">6.</span> <span class="toc-text">执行</span></a></li></ol>
  
   </div>
 
