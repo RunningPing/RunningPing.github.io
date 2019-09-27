@@ -4,27 +4,24 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>FDS | RunningPing</title>
+    <title>Openstack中网络的实现及其中存在的问题 | RunningPing</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Ping">
     
 
     
-    <meta name="description" content="Lecture1 FDSFDS将一个程序D分成五部分:V,O,&amp;theta;,$\varrho$,J,C。其中有   V是由个数有限的状态值组成的集合，包括程序中的变量和语句&amp;theta;是描述初始状态值的集合，借助V表示$\varrho$是状态转移关系，不带上标的值表示当前状态，带上标的值表示下一状态。   例子1  12345678// x, y : natural initinally x">
-<meta name="keywords" content="mathematical logic">
+    <meta name="description" content="ConclusionOpenStack是开源的云计算平台，其网络实现Neutron对于软件定义网络的思想的学习有很好的帮助，由于最近需要对SDN进行相关了解，以便解决虚拟网络中的硬件接入问题。Neutron基于软件定义网络的思想实现了网络虚拟化下的资源管理。Neutron在预计算平台中的部分节点作为网络节点，提供网络服务。Neutron使用OpenvSwitch实现SDN，每一个虚拟即的网卡都会连">
+<meta name="keywords" content="network">
 <meta property="og:type" content="article">
-<meta property="og:title" content="FDS">
-<meta property="og:url" content="https://runningping.github.io/ping.github.io/2019/01/04/FDS/index.html">
+<meta property="og:title" content="Openstack中网络的实现及其中存在的问题">
+<meta property="og:url" content="https://runningping.github.io/ping.github.io/2019/09/27/Openstack中网络的实现及其中存在的问题/index.html">
 <meta property="og:site_name" content="RunningPing">
-<meta property="og:description" content="Lecture1 FDSFDS将一个程序D分成五部分:V,O,&amp;theta;,$\varrho$,J,C。其中有   V是由个数有限的状态值组成的集合，包括程序中的变量和语句&amp;theta;是描述初始状态值的集合，借助V表示$\varrho$是状态转移关系，不带上标的值表示当前状态，带上标的值表示下一状态。   例子1  12345678// x, y : natural initinally x">
-<meta property="og:image" content="https://runningping.github.io/image/P_1.jpg">
-<meta property="og:image" content="https://runningping.github.io/image/P_2.jpg">
-<meta property="og:updated_time" content="2019-01-04T15:55:46.658Z">
+<meta property="og:description" content="ConclusionOpenStack是开源的云计算平台，其网络实现Neutron对于软件定义网络的思想的学习有很好的帮助，由于最近需要对SDN进行相关了解，以便解决虚拟网络中的硬件接入问题。Neutron基于软件定义网络的思想实现了网络虚拟化下的资源管理。Neutron在预计算平台中的部分节点作为网络节点，提供网络服务。Neutron使用OpenvSwitch实现SDN，每一个虚拟即的网卡都会连">
+<meta property="og:updated_time" content="2019-09-27T05:42:19.719Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="FDS">
-<meta name="twitter:description" content="Lecture1 FDSFDS将一个程序D分成五部分:V,O,&amp;theta;,$\varrho$,J,C。其中有   V是由个数有限的状态值组成的集合，包括程序中的变量和语句&amp;theta;是描述初始状态值的集合，借助V表示$\varrho$是状态转移关系，不带上标的值表示当前状态，带上标的值表示下一状态。   例子1  12345678// x, y : natural initinally x">
-<meta name="twitter:image" content="https://runningping.github.io/image/P_1.jpg">
+<meta name="twitter:title" content="Openstack中网络的实现及其中存在的问题">
+<meta name="twitter:description" content="ConclusionOpenStack是开源的云计算平台，其网络实现Neutron对于软件定义网络的思想的学习有很好的帮助，由于最近需要对SDN进行相关了解，以便解决虚拟网络中的硬件接入问题。Neutron基于软件定义网络的思想实现了网络虚拟化下的资源管理。Neutron在预计算平台中的部分节点作为网络节点，提供网络服务。Neutron使用OpenvSwitch实现SDN，每一个虚拟即的网卡都会连">
 
     
     <link rel="alternative" href="/atom.xml" title="RunningPing" type="application/atom+xml">
@@ -84,14 +81,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2019/01/04/FDS/" title="FDS" itemprop="url">FDS</a>
+      <a href="/2019/09/27/Openstack中网络的实现及其中存在的问题/" title="Openstack中网络的实现及其中存在的问题" itemprop="url">Openstack中网络的实现及其中存在的问题</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Ping" target="_blank" itemprop="author">Ping</a>
 		
   <p class="article-time">
-    <time datetime="2019-01-04T14:53:51.000Z" itemprop="datePublished"> 發表於 2019-01-04</time>
+    <time datetime="2019-09-27T05:41:33.000Z" itemprop="datePublished"> 發表於 2019-09-27</time>
     
   </p>
 </header>
@@ -100,31 +97,11 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Lecture1"><span class="toc-number">1.</span> <span class="toc-text">Lecture1</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.</span> <span class="toc-text">Conclusion</span></a></li></ol>
 		
 		</div>
 		
-		<h2 id="Lecture1"><a href="#Lecture1" class="headerlink" title="Lecture1"></a>Lecture1</h2><ol>
-<li>FDS<br>FDS将一个程序D分成五部分:V,O,&theta;,$\varrho$,J,C。其中有  <blockquote>
-<p>V是由个数有限的状态值组成的集合，包括程序中的变量和语句<br>&theta;是描述初始状态值的集合，借助V表示<br>$\varrho$是状态转移关系，不带上标的值表示当前状态，带上标的值表示下一状态。</p>
-</blockquote>
-</li>
-<li>例子1</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">// x, y : natural initinally x = y = 0</div><div class="line">//P1</div><div class="line">l0: while x = 0 do</div><div class="line">    [l1: y = y + 1]</div><div class="line">l2:</div><div class="line">m0: x = 1</div><div class="line">m1: </div><div class="line">//P2</div></pre></td></tr></table></figure>
-<div align="center"><img src="/image/P_1.jpg"></div>
-
-<p>需要注意有：</p>
-<blockquote>
-<p>是式中等号的优先级比合取的符号优先:<br>$\varrhos_{l0}$中大括号的内容表示为while语句中的判断过程;<br>每个状态转移关系中，只改变语句的状态，执行该语句会产生的变化，不用考虑该语句的状态转变导致的其他语句的执行顺序的改变。</p>
-</blockquote>
-<ol>
-<li>例子2</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">// x, y : natural initinally x = y = 0</div><div class="line">//P1</div><div class="line">l0: if x = 0 do </div><div class="line">    [l1: y = y + 2]</div><div class="line">l2: while x = 1 do </div><div class="line">    [l3:]</div><div class="line">//P2</div><div class="line">m0: x = 1</div><div class="line">m1:</div></pre></td></tr></table></figure>
-<div align="center"><img src="/image/P_2.jpg"></div>
-
-<p>还有问题的话可以QQ找我~</p>
+		<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>OpenStack是开源的云计算平台，其网络实现Neutron对于软件定义网络的思想的学习有很好的帮助，由于最近需要对SDN进行相关了解，以便解决虚拟网络中的硬件接入问题。Neutron基于软件定义网络的思想实现了网络虚拟化下的资源管理。Neutron在预计算平台中的部分节点作为网络节点，提供网络服务。Neutron使用OpenvSwitch实现SDN，每一个虚拟即的网卡都会连接到一个称为br-int（嵌入式网桥，基于linux的网桥实现）的OpenvSwitch的节点实现，br-int作为SDN中的二层交换设备接受控制节点的设定的流表规则转发数据包，由br-int组成的子网会通过br-tun（网桥实现）进行互联以及与外网相连。br-tun是SDN中的三层设备，可以有真实的网络设备实现。整个网络的SDN实现通过Overlay的方式，存在GRE，vlan，vxlan，三种方式实现，细节略去。Neutron实现了NFV的思想，即软件即服务，如FWaaS，其中在最新的版本中某些高级功能已经实现了针对单独VM的高级服务。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -133,7 +110,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/mathematical-logic/">mathematical logic</a>
+  <span></span> <a href="/tags/network/">network</a>
   </div>
 
 </div>
@@ -142,7 +119,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://runningping.github.io/ping.github.io/2019/01/04/FDS/" data-title="FDS | RunningPing" data-tsina="null" class="share clearfix">
+	  <div data-url="https://runningping.github.io/ping.github.io/2019/09/27/Openstack中网络的实现及其中存在的问题/" data-title="Openstack中网络的实现及其中存在的问题 | RunningPing" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -156,21 +133,13 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2017/10/14/MyBlog/" title="MyBlog">
+ <a href="/2019/09/25/Linux内核、根文件系统和交叉编译工具链/" title="Linux内核、根文件系统和交叉编译工具链">
   <strong>上一篇：</strong><br/>
   <span>
-  MyBlog</span>
+  Linux内核、根文件系统和交叉编译工具链</span>
 </a>
 </div>
 
-
-<div class="next">
-<a href="/2019/09/11/Zynq中的linux环境构建/"  title="Zedboard中的linux环境构建">
- <strong>下一篇：</strong><br/> 
- <span>Zedboard中的linux环境构建
-</span>
-</a>
-</div>
 
 </nav>
 
@@ -182,7 +151,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Lecture1"><span class="toc-number">1.</span> <span class="toc-text">Lecture1</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.</span> <span class="toc-text">Conclusion</span></a></li></ol>
  
   </div>
 
