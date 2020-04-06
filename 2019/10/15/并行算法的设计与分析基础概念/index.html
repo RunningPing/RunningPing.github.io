@@ -12,13 +12,13 @@
 
     
     <meta name="description" content="并行算法的性能分析  加速 s(n) 处理器数目 p(n) 效率 e(n)=s(n)/p(n) 成本 c(n)=t(n)*p(n)   并行算法的WT表现方式Brent定理 W(n)是并行算法的在运行时间T(n)的内所执行的运算数量，则A使用p台处理器可在t(n)=O(W(n)/p+T(n))时间执行完毕。WT表现形式允许将算法自上而下分为高层表述和底层描述，在进行高层描述时，算法不必指明使用多">
-<meta name="keywords" content="network">
+<meta name="keywords" content="algorithm">
 <meta property="og:type" content="article">
 <meta property="og:title" content="并行算法的设计与分析基础概念">
 <meta property="og:url" content="https://runningping.github.io/ping.github.io/2019/10/15/并行算法的设计与分析基础概念/index.html">
 <meta property="og:site_name" content="RunningPing">
 <meta property="og:description" content="并行算法的性能分析  加速 s(n) 处理器数目 p(n) 效率 e(n)=s(n)/p(n) 成本 c(n)=t(n)*p(n)   并行算法的WT表现方式Brent定理 W(n)是并行算法的在运行时间T(n)的内所执行的运算数量，则A使用p台处理器可在t(n)=O(W(n)/p+T(n))时间执行完毕。WT表现形式允许将算法自上而下分为高层表述和底层描述，在进行高层描述时，算法不必指明使用多">
-<meta property="og:updated_time" content="2020-04-06T01:08:07.521Z">
+<meta property="og:updated_time" content="2020-04-06T01:10:07.871Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="并行算法的设计与分析基础概念">
 <meta name="twitter:description" content="并行算法的性能分析  加速 s(n) 处理器数目 p(n) 效率 e(n)=s(n)/p(n) 成本 c(n)=t(n)*p(n)   并行算法的WT表现方式Brent定理 W(n)是并行算法的在运行时间T(n)的内所执行的运算数量，则A使用p台处理器可在t(n)=O(W(n)/p+T(n))时间执行完毕。WT表现形式允许将算法自上而下分为高层表述和底层描述，在进行高层描述时，算法不必指明使用多">
@@ -109,11 +109,11 @@
 <li>效率 <code>e(n)=s(n)/p(n)</code></li>
 <li>成本 <code>c(n)=t(n)*p(n)</code></li>
 </ul>
-<ol>
+</li>
 <li><p>并行算法的WT表现方式<br>Brent定理 W(n)是并行算法的在运行时间T(n)的内所执行的运算数量，则A使用p台处理器可在<code>t(n)=O(W(n)/p+T(n))</code>时间执行完毕。<br>WT表现形式允许将算法自上而下分为高层表述和底层描述，在进行高层描述时，算法不必指明使用多少台处理器和处理器具体的操作；底层描述时使用Brent调度原理将算法工作量分配给指定的处理器。</p>
 </li>
 <li><p>并行算法的设计技术</p>
-</li>
+<ol>
 <li>平衡数方法<br>将输入元素作为叶节点构筑一棵平衡二叉树，然后自叶向根往返遍历。这是问题分解的一种方式，能够实现<code>n/log(n)</code>的加速，适用于能够按照平衡二叉树划分计算量的算法（类似于均匀划分的递归算法），其具有快速读取树中元素的优势。</li>
 <li>倍增技术<br>每当递归调用时，所要处理的数据之间的距离将逐步加倍，适用于存在有向连接的数据结构</li>
 </ol>
@@ -127,7 +127,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/network/">network</a>
+  <span></span> <a href="/tags/algorithm/">algorithm</a>
   </div>
 
 </div>
@@ -191,7 +191,7 @@
 			
 		
 			
-				<li><a href="/tags/algorithm/" title="algorithm">algorithm<sup>2</sup></a></li>
+				<li><a href="/tags/algorithm/" title="algorithm">algorithm<sup>3</sup></a></li>
 			
 		
 			
@@ -203,15 +203,15 @@
 			
 		
 			
-				<li><a href="/tags/network/" title="network">network<sup>2</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Unclassified/" title="Unclassified">Unclassified<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/mathematical-logic/" title="mathematical logic">mathematical logic<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/network/" title="network">network<sup>1</sup></a></li>
 			
 		
 		</ul>
