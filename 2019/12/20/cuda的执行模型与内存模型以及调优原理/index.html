@@ -1,0 +1,520 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-cn">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>计算复杂性理论 | RunningPing</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Ping">
+    
+
+    
+    <meta name="description" content="cuda线程执行模型__global__主机端调用，设备端执行__device__设备端执行，设备端调用__host__  主机端调用，主机端执行  SM流式多处理器系统与线程束wrap的联系一个SM拥有32个处理器，16个处理器一组，一个处理器一个时钟周期只能够处理一个整数或者浮点运算，一个线程束在一个组中执行，SM能够同时处理48个线程束，SM能够同时执行1536个线程SM会以线程束为单位分配">
+<meta name="keywords" content="cuda">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算复杂性理论">
+<meta property="og:url" content="https://runningping.github.io/ping.github.io/2019/12/20/cuda的执行模型与内存模型以及调优原理/index.html">
+<meta property="og:site_name" content="RunningPing">
+<meta property="og:description" content="cuda线程执行模型__global__主机端调用，设备端执行__device__设备端执行，设备端调用__host__  主机端调用，主机端执行  SM流式多处理器系统与线程束wrap的联系一个SM拥有32个处理器，16个处理器一组，一个处理器一个时钟周期只能够处理一个整数或者浮点运算，一个线程束在一个组中执行，SM能够同时处理48个线程束，SM能够同时执行1536个线程SM会以线程束为单位分配">
+<meta property="og:updated_time" content="2020-04-06T01:19:14.960Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="计算复杂性理论">
+<meta name="twitter:description" content="cuda线程执行模型__global__主机端调用，设备端执行__device__设备端执行，设备端调用__host__  主机端调用，主机端执行  SM流式多处理器系统与线程束wrap的联系一个SM拥有32个处理器，16个处理器一组，一个处理器一个时钟周期只能够处理一个整数或者浮点运算，一个线程束在一个组中执行，SM能够同时处理48个线程束，SM能够同时执行1536个线程SM会以线程束为单位分配">
+
+    
+    <link rel="alternative" href="/atom.xml" title="RunningPing" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="RunningPing" title="RunningPing"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="RunningPing">RunningPing</a></h1>
+				<h2 class="blog-motto">biubiubiu</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:runningping.github.io/ping.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2019/12/20/cuda的执行模型与内存模型以及调优原理/" title="计算复杂性理论" itemprop="url">计算复杂性理论</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Ping" target="_blank" itemprop="author">Ping</a>
+		
+  <p class="article-time">
+    <time datetime="2019-12-20T05:41:33.000Z" itemprop="datePublished"> 发表于 2019-12-20</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#cuda线程执行模型"><span class="toc-number">1.</span> <span class="toc-text">cuda线程执行模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cuda内存模型"><span class="toc-number">2.</span> <span class="toc-text">cuda内存模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#模型"><span class="toc-number">2.1.</span> <span class="toc-text">模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#内存管理技术"><span class="toc-number">2.2.</span> <span class="toc-text">内存管理技术</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#内存访问模式"><span class="toc-number">2.3.</span> <span class="toc-text">内存访问模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#共享内存"><span class="toc-number">3.</span> <span class="toc-text">共享内存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nvprof的使用"><span class="toc-number">4.</span> <span class="toc-text">nvprof的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nvcc使用"><span class="toc-number">5.</span> <span class="toc-text">nvcc使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#流模型"><span class="toc-number">6.</span> <span class="toc-text">流模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#指令级原语"><span class="toc-number">7.</span> <span class="toc-text">指令级原语</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="cuda线程执行模型"><a href="#cuda线程执行模型" class="headerlink" title="cuda线程执行模型"></a>cuda线程执行模型</h2><p><code>__global__</code>主机端调用，设备端执行<br><code>__device__</code>设备端执行，设备端调用<br><code>__host__</code>  主机端调用，主机端执行</p>
+<ol>
+<li><p>SM流式多处理器系统与线程束wrap的联系<br>一个SM拥有32个处理器，16个处理器一组，一个处理器一个时钟周期只能够处理一个整数或者浮点运算，一个线程束在一个组中执行，SM能够同时处理48个线程束，SM能够同时执行1536个线程<br>SM会以线程束为单位分配计算资源，存在与SM的活跃线程束的资源会持续其整个生命周期，因此线程束的上下文切换非常快。<br>内存中的概念：<code>共享内存</code> <code>二级缓存</code> <code>一级缓存</code> <code>寄存器文件</code>。</p>
+</li>
+<li><p>线程束分化的概念   复杂的控制流是通过禁止一部分线程执行相关指令实现的   避免统一线程束中不同的执行路径  在不同的线程束中不存在线程束分化概念</p>
+</li>
+<li><p>逻辑概念和硬件概念<br>逻辑概念  线程块  与  网格<br>硬件上分配线程块和网格是根据具体的硬件资源<br>一个SM上寄存器和共享内存是一定的每个线程消耗的资源越多，sm能够执行的线程便越少<br>最大化活跃线程束数量</p>
+</li>
+<li><p>延迟隐藏<br>sm的线程束调度器执行指令时存在延迟，因此为了在指令延迟期间执行其他线程就可以隐式的隐藏指令的延迟</p>
+</li>
+<li><p>占用率概念<br>占用率为活跃线程数量和最大线程数量的比值，每个GPU所支持的SM的最大线程束数量是一定的。<br>SM上的寄存器和共享内存是一定的<br>SM上能够并行的线程与线程所使用的硬件资源即寄存器和共享内存相关联<br>当SM上能够运行的线程束取决于一共能够运行的线程数</p>
+</li>
+</ol>
+<p>为了达到一个高占用率，需要联合硬件的计算能力，硬件寄存器和共享内存资源以及算法所需寄存器与共享内存资源<br>为了匹配硬件条件，需要使用官方提供的工具计算编译算法所使用的寄存器，指定线程块大小，得到最优解<br>考虑占用率的同时也要考虑其他元素，内核达到一定程度的占用率后性能可能不会继续增加<br>线程块大小，硬件资源，算法所需的硬件资源提供决定占用率  能够用官方工具得到一个较高的线程块大小值。</p>
+<p>一个块的最内层维度数x应该是线程束的整数倍数</p>
+<p>线程块越多，应该可以得到更高的并行率，更高的占用率</p>
+<p>cuda是一个SIMT并行架构，需要点明的是Thread这个概念是基于线程束这个概念，在线程束模型实际上是SIMD的模型</p>
+<ol>
+<li>展开循环<br>增加更多独立调度指令，减少指令消耗，以提供更多的独立指令，内存带宽，为线程束调度器提供更多符合符合条件的线程束<br>线程束内是隐式的同步的，volatile确定了全局共享内存的读写顺序性<br>算法的网格和线程块的配置需要启发于GPU设备具体的硬件限制</li>
+</ol>
+<h2 id="cuda内存模型"><a href="#cuda内存模型" class="headerlink" title="cuda内存模型"></a>cuda内存模型</h2><h3 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h3><ol>
+<li>寄存器  sm分配给每个线程 片上 <code>__launch_bounds__(maxThreadsPerBlock, minBlocksPerMultiprocessor)</code>指定线程块最大线程数</li>
+<li>本地寄存器  sm分配给每个线程   可以理解为设备一级或者二级缓存  片外</li>
+<li>共享内存  sm分配给每个线程块的内存  为设备一级缓存  片上 <code>__shared__</code></li>
+<li>常量内存  设备内存中，同时sm中存在常量缓存 <code>__constant__</code></li>
+<li>纹理内存  特殊内存，在某些数据访问中很高效</li>
+<li>全局内存  设备内存，以内存事务的形式被访问，支持32字节，64字节，128字节 <code>__device__</code></li>
+<li>GPU缓存   存在加载缓存，不存在写缓存<h3 id="内存管理技术"><a href="#内存管理技术" class="headerlink" title="内存管理技术"></a>内存管理技术</h3></li>
+<li>内存的分配、传输、释放</li>
+<li>固定内存  通过减少虚拟的分页内存，提高传输数据<h3 id="内存访问模式"><a href="#内存访问模式" class="headerlink" title="内存访问模式"></a>内存访问模式</h3>一行一级缓存是128字节  一级缓存的内存事务是128字节<br>二级缓存使用的是32字节的内存事务<br>为了在内存访问时减少内存事务需要进行对齐内存访问和合并内存访问，用最少的事务次数满足最多的内存请求</li>
+<li>缓存加载 128字节</li>
+<li>非缓存加载 32字节  非缓存</li>
+<li>只读缓存加载 32字节  缓存</li>
+<li>全局内存写入<br>存储操作在32个字节的粒度上执行，内存事务分为一段，两段，四段</li>
+<li>数组结构体AoS比结构体数组SoA的内存访问效率低</li>
+<li>最大化带宽利用率的方法：内存访问模式对齐且合并；每个线程产生更多独立的内存访问，修改核函数启动的执行配置使每个SM有更多的并行性</li>
+<li>对角坐标映射通过调整块的执行顺序避免分区冲突</li>
+</ol>
+<h2 id="共享内存"><a href="#共享内存" class="headerlink" title="共享内存"></a>共享内存</h2><p>共享内存为片上内存，全局内存为板载内存</p>
+<ol>
+<li>共享内存分配<br>已知数据量的分配，<code>__shared__ float array[][]</code><br>编译未知数据量的分配 <code>extern __shared__ float array[]</code> 调用时共享内存大小作为最后一个参数传入</li>
+<li>共享内存存储体和访问模式<br>共享内存的访问通过32个存储体，对应一个线程束中的32个线程<br>访问模式有4字节对齐方式和8字节对齐方式<br>程序中的写命令和线程执行写指令的逻辑顺序有可能在编译器的优化下完全不同，必须使用<code>__synthreads</code>同步一个线程块中的内存访问<br><code>__threadfence_block()</code>和<code>volatile</code>只是阻止了编译器对缓存的使用，没有对线程执行同步，不同的线程的不同执行顺序是不可控的，然而，在线程束中的线程是SIMD锁步执行，这一点可以帮助解决线程束因缓存的使用而不完全锁步问题<br>共享内存的访问事务是一个线程束同时访问在32个存储体的共享内存，如果存在一次存储体冲突需要增加一次事务，因此要通过编程尽量减少事务，典型的方式为共享内存增加一行填充行，填充行的大小需要通过访问模式计算</li>
+<li>常量内存<br>内核中只读，主机中可读可写<br><code>__constant__</code><br>常量内存的访问模式为与线程束中需要访问的位置个数有关<br><code>cudaMemcpyToSymbol</code><br><code>#pragma unroll</code> 编译器展开循环</li>
+<li>只读缓存<br>只能够读<br>相较于一级缓存的分散读取更快，但是比常量内存低<br>内部函数用法<code>__ldg</code>代替标准指针解引用<br>限定指针用法<code>const __restrict__</code></li>
+<li>洗牌指令<br>洗牌指令是一种线程束中线程交换寄存器值的方式，对线程中所有的行为具有相同性，因此交换方式很重要<br>线程束中的线程索引计算方式为threadidx%32<br><code>__shfl(int var, int srcLane, int width)</code> <code>var</code>是传送的值，srclane是目标线程束的值，width是分段大小，默认是线程束大小为32，可以更细粒度的交换<br><code>__shfl_xor(int var, int laneMask, int width)</code> laneMask，以当前线程的线程束所以模分段的值与laneMask异或后的值即为目标线程束的值</li>
+</ol>
+<h2 id="nvprof的使用"><a href="#nvprof的使用" class="headerlink" title="nvprof的使用"></a>nvprof的使用</h2><p><code>--metrics gld_throughput</code> 内存加载吞吐量<br><code>--metrics inst_per_warp</code> 线程束指令数量平均值<br><code>--metrics achieved_occupancy</code> 占用率<br><code>--metrics gld_efficiency</code> 内存加载效率<br><code>--metrics gst_efficiency</code> 内存存储效率<br><code>--metrics gld_transactions</code> 全局内存吞吐量<br><code>--metrics gst_efficiency</code> 全局内存吞吐量<br><code>--metrics shared_load_transactions_per_request</code> 每个线程共享内存加载事务<br><code>--metrics shared_store_transactions_per_request</code> 每个线程共享内存存储事务<br><code>--metrics gld_transactions_per_request</code> 核函数全局内存加载事务<br><code>--metrics gst_transactions_per_request</code> 核函数全局内存存储事务<br><code>--metrics ll_shared_bank_conflict</code> 共享内存冲突次数<br><code>--metrics shared_efficiency</code> 共享内存访问效率<br><code>--metrics ll_cacle_local_hit_rate</code> 一级缓存命中率，禁用全局的一级缓存后，一级缓存主要用于处理寄存器溢出，溢出于一级缓存的寄存器会出现在全局内存中，效率会下降，一级缓存和共享内存一共是</p>
+<h2 id="nvcc使用"><a href="#nvcc使用" class="headerlink" title="nvcc使用"></a>nvcc使用</h2><p>-Xptxas -dlcm=ca/cg 启用缓存/不启用缓存<br>加载存储吞吐量与有效带宽不是一回事，吞吐量乘以加载、存储效率才是有效带宽，吞吐量并不是有效带宽，能够高于内存带宽峰值<br>nvvp可视化分析工具</p>
+<h2 id="流模型"><a href="#流模型" class="headerlink" title="流模型"></a>流模型</h2><p>主机调用内核是异步的，主机执行数据传输时是串行同步的，通过流执行主机与设备间操作能够完全异步，实现内核并发操作，即设备计算与设备计算间，设备与主机计算间，设备计算与设备与主机传输间的操作<br>流中的指令是有顺序的，不同流之间的指令是没有顺序的<br>异步执行数据传输时需要使用固定内存<br><code>cudaStreamCreate</code><br><code>cudaStreamDestory</code><br><code>cudaStreamSynchronize</code><br><code>cudaMemcpyAsync</code>   </p>
+<ol>
+<li>流的优先级<br><code>cudaStreamCreateWithPriority</code><br><code>cudaDeviceGetStreamPriorityRange</code></li>
+<li>流中创建事件<br><code>cudaEventCreate</code><br><code>cudaEventDestory</code></li>
+<li>流中插入事件<br><code>cudaEventRecord</code><br><code>cudaEventSynchronize</code><br><code>cudaEventQuery</code><br><code>cudaEventElapsedTime</code></li>
+<li>流同步<br>流分为阻塞流和非阻塞流，阻塞流中的内核函数会和空流中的内核同步执行<br>非空流创建函数 <code>cudaStreamCreateWithFlags</code><br><code>cudaDeviceSynchronize</code> 同步设备<br><code>cudaStreamSynchronize</code> 流同步<br><code>cudaStreamQuery</code>       流查询<br><code>cudaEventSynchronize</code>  流事件同步<br><code>cudaEventQuery</code>        流事件查询<br><code>cudaStreamWaitEvent</code>   流事件依赖<br>内核函数在流中是依赖的，所以会串行，因此在比较老的架构中只有一个工作队列，会产生虚假依赖的关系<br>Kepler架构中GPU的硬件工作队列个数为32，避免了虚假依赖<br>能够通过设置环境变量的方式改变硬件工作队列个数<code>setenv(&quot;CUDA_DEVICE_MAX_CONNECTIONS&quot;, &quot;32&quot;, 1)</code><br>异步执行的错误处理不能即时反馈，需要使用函数<code>cudaGetLastError</code>查询上次错误</li>
+<li>流回调<br>能够在流中添加主机函数作为回调函数在流执行完之前的操作会继续执行主机函数，注意不能添加cuda运行函数</li>
+</ol>
+<h2 id="指令级原语"><a href="#指令级原语" class="headerlink" title="指令级原语"></a>指令级原语</h2><p>指令是处理器的基本逻辑单元</p>
+<ol>
+<li>浮点指令<br>IEEE-754标准<br>32位浮点变量 标志位s 1 指数e 8  位数v 23<br>64位浮点变量 标志位s 1 指数e 11 位数v 52<br>浮点数表示精度比整数差，粒度比整数好</li>
+<li>内部函数和标准函数<br>标准函数是C标准数学库中支持的函数，内部函数只能对设备代码进行访问，具有比标准函数更少的指令，但是精度低于标准函数</li>
+<li>原子函数</li>
+<li>性能、正确性和精确度<br>标准函数比内部函数精度高，比内部函数精度低<br>编译指令 <code>--use_fast_math=true</code></li>
+</ol>
+<p>warp执行指令的时间取决于指令时间和指令延迟<br>使用同步函数可以通过大量的block充分使用设备性能<br>内存事务的增多会降低指令吞吐量，这里的指令吞吐量应该不包含内存指令<br>低吞吐量的算术指令   单位时间内能够执行算术指令的数量，算术指令需要较多的指令完成从而会降低算术指令的吞吐量</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/cuda/">cuda</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://runningping.github.io/ping.github.io/2019/12/20/cuda的执行模型与内存模型以及调优原理/" data-title="计算复杂性理论 | RunningPing" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2019/11/07/计算复杂性理论/" title="计算复杂性理论">
+  <strong>上一篇：</strong><br/>
+  <span>
+  计算复杂性理论</span>
+</a>
+</div>
+
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#cuda线程执行模型"><span class="toc-number">1.</span> <span class="toc-text">cuda线程执行模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cuda内存模型"><span class="toc-number">2.</span> <span class="toc-text">cuda内存模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#模型"><span class="toc-number">2.1.</span> <span class="toc-text">模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#内存管理技术"><span class="toc-number">2.2.</span> <span class="toc-text">内存管理技术</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#内存访问模式"><span class="toc-number">2.3.</span> <span class="toc-text">内存访问模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#共享内存"><span class="toc-number">3.</span> <span class="toc-text">共享内存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nvprof的使用"><span class="toc-number">4.</span> <span class="toc-text">nvprof的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nvcc使用"><span class="toc-number">5.</span> <span class="toc-text">nvcc使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#流模型"><span class="toc-number">6.</span> <span class="toc-text">流模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#指令级原语"><span class="toc-number">7.</span> <span class="toc-text">指令级原语</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/algorithm/" title="algorithm">algorithm<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/zynq/" title="zynq">zynq<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JSP-Servlet/" title="JSP&amp;Servlet">JSP&amp;Servlet<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Unclassified/" title="Unclassified">Unclassified<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/mathematical-logic/" title="mathematical logic">mathematical logic<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/network/" title="network">network<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cuda/" title="cuda">cuda<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=null&verifier=&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Larry Page in Google. <br/>
+			This is my blog,believe it or not.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2398935587" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2020 
+		
+		<a href="/about" target="_blank" title="Ping">Ping</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
