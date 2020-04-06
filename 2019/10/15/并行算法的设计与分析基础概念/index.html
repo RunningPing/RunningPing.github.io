@@ -4,24 +4,24 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>八宫格 | RunningPing</title>
+    <title>并行算法的设计与分析基础概念 | RunningPing</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Ping">
     
 
     
-    <meta name="description" content="题目描述拼图，是一个老少皆宜的益智游戏，在打乱的3*3的范围中，玩家只能每次将空格(0)和相邻的数字格（上、下、左、右）交换，最终调整出一个完整的拼图。完整拼图为：1 2 34 5 67 8 0 import java.io.*; import java.util.*; import java.text.*; import java.math.*; import java.util.regex.*">
-<meta name="keywords" content="algorithm">
+    <meta name="description" content="并行算法的性能分析  加速 s(n) 处理器数目 p(n) 效率 e(n)=s(n)/p(n) 成本 c(n)=t(n)*p(n)   并行算法的WT表现方式Brent定理 W(n)是并行算法的在运行时间T(n)的内所执行的运算数量，则A使用p台处理器可在t(n)=O(W(n)/p+T(n))时间执行完毕。WT表现形式允许将算法自上而下分为高层表述和底层描述，在进行高层描述时，算法不必指明使用多">
+<meta name="keywords" content="network">
 <meta property="og:type" content="article">
-<meta property="og:title" content="八宫格">
-<meta property="og:url" content="https://runningping.github.io/ping.github.io/2017/04/22/八宫格/index.html">
+<meta property="og:title" content="并行算法的设计与分析基础概念">
+<meta property="og:url" content="https://runningping.github.io/ping.github.io/2019/10/15/并行算法的设计与分析基础概念/index.html">
 <meta property="og:site_name" content="RunningPing">
-<meta property="og:description" content="题目描述拼图，是一个老少皆宜的益智游戏，在打乱的3*3的范围中，玩家只能每次将空格(0)和相邻的数字格（上、下、左、右）交换，最终调整出一个完整的拼图。完整拼图为：1 2 34 5 67 8 0 import java.io.*; import java.util.*; import java.text.*; import java.math.*; import java.util.regex.*">
-<meta property="og:updated_time" content="2017-04-22T08:00:12.000Z">
+<meta property="og:description" content="并行算法的性能分析  加速 s(n) 处理器数目 p(n) 效率 e(n)=s(n)/p(n) 成本 c(n)=t(n)*p(n)   并行算法的WT表现方式Brent定理 W(n)是并行算法的在运行时间T(n)的内所执行的运算数量，则A使用p台处理器可在t(n)=O(W(n)/p+T(n))时间执行完毕。WT表现形式允许将算法自上而下分为高层表述和底层描述，在进行高层描述时，算法不必指明使用多">
+<meta property="og:updated_time" content="2020-04-06T01:08:07.521Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="八宫格">
-<meta name="twitter:description" content="题目描述拼图，是一个老少皆宜的益智游戏，在打乱的3*3的范围中，玩家只能每次将空格(0)和相邻的数字格（上、下、左、右）交换，最终调整出一个完整的拼图。完整拼图为：1 2 34 5 67 8 0 import java.io.*; import java.util.*; import java.text.*; import java.math.*; import java.util.regex.*">
+<meta name="twitter:title" content="并行算法的设计与分析基础概念">
+<meta name="twitter:description" content="并行算法的性能分析  加速 s(n) 处理器数目 p(n) 效率 e(n)=s(n)/p(n) 成本 c(n)=t(n)*p(n)   并行算法的WT表现方式Brent定理 W(n)是并行算法的在运行时间T(n)的内所执行的运算数量，则A使用p台处理器可在t(n)=O(W(n)/p+T(n))时间执行完毕。WT表现形式允许将算法自上而下分为高层表述和底层描述，在进行高层描述时，算法不必指明使用多">
 
     
     <link rel="alternative" href="/atom.xml" title="RunningPing" type="application/atom+xml">
@@ -81,14 +81,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/04/22/八宫格/" title="八宫格" itemprop="url">八宫格</a>
+      <a href="/2019/10/15/并行算法的设计与分析基础概念/" title="并行算法的设计与分析基础概念" itemprop="url">并行算法的设计与分析基础概念</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Ping" target="_blank" itemprop="author">Ping</a>
 		
   <p class="article-time">
-    <time datetime="2017-04-22T07:37:51.000Z" itemprop="datePublished"> Published 2017-04-22</time>
+    <time datetime="2019-10-15T05:41:33.000Z" itemprop="datePublished"> Published 2019-10-15</time>
     
   </p>
 </header>
@@ -101,151 +101,25 @@
 		
 		</div>
 		
-		<p><strong>题目描述</strong><br>拼图，是一个老少皆宜的益智游戏，在打乱的3*3的范围中，玩家只能每次将空格(0)和相邻的数字格（上、下、左、右）交换，最终调整出一个完整的拼图。<br>完整拼图为：<br>1 2 3<br>4 5 6<br>7 8 0</p>
-<pre><code>import java.io.*;
-import java.util.*;
-import java.text.*;
-import java.math.*;
-import java.util.regex.*;
-import java.util.Scanner;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.ArrayList;
-import java.lang.StringBuilder;
-
-//广度优先
-public class Main{
-
-    //目标序列
-    public static String destNumbers = &quot;123456780&quot;;
-    //已计算Set，用来判断哪些位置已经移动到过
-    public static Set&lt;Integer&gt; set = new HashSet&lt;Integer&gt;();
-
-    //0在每一位置的可移动(交换)规则[上(1) 左(2) 右(4) 下(8),位或关系]
-    public static int[]moveTable = new int[]{12,14,10,13,15,11,5,7,3};
-
-
-    /*
-    上(1) 左(2) 右(4) 下(8)
-    0 -&gt; 右 下(12)
-    1 -&gt; 左 右 下(14)
-    2 -&gt; 左 下(10)
-    3 -&gt; 上 右 下(13)
-    4 -&gt; 上 左 下 右(15)
-    5 -&gt; 上 左 下(11)
-    6 -&gt; 上 右(5)
-    7 -&gt; 左 上 右(7)
-    8 -&gt; 上 左(3)
-    */
-    //moveStatus 上(1) 左(2) 右(4) 下(8)
-    public static ArrayList&lt;Node&gt; getNextMoveList(Node pNode){
-
-        int position = pNode.numbers.indexOf(&quot;0&quot;);
-        int moveStatus = moveTable[position];
-        ArrayList&lt;Node&gt; cNodes = new ArrayList&lt;Node&gt;();
-
-
-        for(int status=1; status &lt;=8; status=status&lt;&lt;1){
-            if((moveStatus &amp; status) &gt; 0){
-                char[] charNumbers = pNode.numbers.toCharArray();
-                int switchPosition = 0;
-                if(status == 1){//上
-                switchPosition = position - 3;
-                } else if(status == 2){//左
-                switchPosition = position - 1;
-                } else if(status == 4){//右
-                switchPosition = position + 1;
-                } else if(status == 8){//下
-                switchPosition = position + 3;
-                }
-                charNumbers[position] = charNumbers[switchPosition];
-                charNumbers[switchPosition] = &apos;0&apos;;
-                String s = String.valueOf(charNumbers);
-                //判断此序列未出现过
-                if(!set.contains(Integer.valueOf(s))){
-                    set.add(Integer.valueOf(s));
-                    Node n = new Node(pNode, s, charNumbers[position]);
-                    cNodes.add(n);
-                }
-            }
-        }
-        return cNodes;
-    }
-
-    /*请完成下面这个函数，实现题目要求的功能*/
-    /*当然，你也可以不按照下面这个模板来作答，完全按照自己的想法来 ^-^ */
-    /******************************开始写代码******************************/
-
-    //输出结果
-    static int getResult(Node node){
-        String result = &quot;&quot;;
-        while(node.parentNode != null){
-            result += node.currentNum;
-            node = node.parentNode;
-        }
-        return new StringBuffer(result).reverse().toString().length();
-    }
-
-    static int run(String numbers){
-        if(numbers.equals(destNumbers)){
-            //无需移动
-            return 0;
-        }
-        ArrayList&lt;Node&gt; numsList = new ArrayList&lt;Node&gt;();
-        //初始化根节点
-        numsList.add(new Node(null, numbers, &apos; &apos;));
-        while(numsList.size() &gt; 0){
-            //广度优先每层的tmpList
-            ArrayList&lt;Node&gt; tmpList = new ArrayList&lt;Node&gt;();
-
-            for(Node pNode : numsList){
-                ArrayList&lt;Node&gt; cNodes = getNextMoveList(pNode);
-
-                for(Node cNode : cNodes){
-                    if(cNode.numbers.equals(destNumbers)){
-                        //返回步数
-                        return getResult(cNode);
-                    }
-                    tmpList.add(cNode);
-                }
-            }
-
-            numsList = tmpList;
-        }
-        //无解
-        return -1;
-    }
-/******************************结束写代码******************************/
-
-    public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
-
-        String numbers = new String();
-        for(int rows=3; rows&gt;0; rows--){
-            for(String n: scan.nextLine().split(&quot; &quot;)){
-                numbers += n;
-            }
-        }
-
-        int res = run(numbers);
-
-        System.out.println(String.valueOf(res));
-    }
-}
-
-
-//节点类
-class Node {
-    public Node(Node parentNode, String numbers, char currentNum){
-        this.numbers = numbers;
-        this.currentNum = currentNum;
-        this.parentNode = parentNode;
-    }
-    public char currentNum;            //节点当前移动的数字
-    public String numbers;    //当前数字序列字符
-    public Node parentNode;           //父节点
-}
-</code></pre>  
+		<ol>
+<li><p>并行算法的性能分析</p>
+<ul>
+<li>加速 <code>s(n)</code></li>
+<li>处理器数目 <code>p(n)</code></li>
+<li>效率 <code>e(n)=s(n)/p(n)</code></li>
+<li>成本 <code>c(n)=t(n)*p(n)</code></li>
+</ul>
+<ol>
+<li><p>并行算法的WT表现方式<br>Brent定理 W(n)是并行算法的在运行时间T(n)的内所执行的运算数量，则A使用p台处理器可在<code>t(n)=O(W(n)/p+T(n))</code>时间执行完毕。<br>WT表现形式允许将算法自上而下分为高层表述和底层描述，在进行高层描述时，算法不必指明使用多少台处理器和处理器具体的操作；底层描述时使用Brent调度原理将算法工作量分配给指定的处理器。</p>
+</li>
+<li><p>并行算法的设计技术</p>
+</li>
+<li>平衡数方法<br>将输入元素作为叶节点构筑一棵平衡二叉树，然后自叶向根往返遍历。这是问题分解的一种方式，能够实现<code>n/log(n)</code>的加速，适用于能够按照平衡二叉树划分计算量的算法（类似于均匀划分的递归算法），其具有快速读取树中元素的优势。</li>
+<li>倍增技术<br>每当递归调用时，所要处理的数据之间的距离将逐步加倍，适用于存在有向连接的数据结构</li>
+</ol>
+</li>
+</ol>
+  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
@@ -253,7 +127,7 @@ class Node {
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/algorithm/">algorithm</a>
+  <span></span> <a href="/tags/network/">network</a>
   </div>
 
 </div>
@@ -262,7 +136,7 @@ class Node {
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://runningping.github.io/ping.github.io/2017/04/22/八宫格/" data-title="八宫格 | RunningPing" data-tsina="null" class="share clearfix">
+	  <div data-url="https://runningping.github.io/ping.github.io/2019/10/15/并行算法的设计与分析基础概念/" data-title="并行算法的设计与分析基础概念 | RunningPing" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -275,14 +149,14 @@ class Node {
 	
 <nav class="article-nav clearfix">
  
-
-<div class="next">
-<a href="/2017/04/22/CombinationSum/"  title="CombinationSum">
- <strong>下一篇：</strong><br/> 
- <span>CombinationSum
-</span>
+ <div class="prev" >
+ <a href="/2019/09/27/Openstack中网络的实现及其中存在的问题/" title="Openstack中网络的实现及其中存在的问题">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Openstack中网络的实现及其中存在的问题</span>
 </a>
 </div>
+
 
 </nav>
 

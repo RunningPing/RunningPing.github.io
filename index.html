@@ -44,7 +44,7 @@
 				<h1 class="site-name"><a href="/" title="RunningPing">RunningPing</a></h1>
 				<h2 class="blog-motto">biubiubiu</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -60,7 +60,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:runningping.github.io/ping.github.io">
 					</form>
 					
@@ -71,6 +71,34 @@
     </header>
     <div id="container">
       <div id="main">
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2019/10/15/并行算法的设计与分析基础概念/" title="并行算法的设计与分析基础概念" itemprop="url">
+  
+    <h1 itemprop="name">并行算法的设计与分析基础概念</h1>
+    
+     
+           <p itemprop="description" >并行算法的性能分析
+
+加速 s(n)
+处理器数目 p(n)
+效率 e(n)=s(n)/p(n)
+成本 c(n)=t(n)*p(n)
+
+
+并行算法的WT表现方式Brent定理 W(n)是并行算法的在运行时间T(n)的内所执行的运算数量，则A使用p台处理器可在t(n)=O(W(n)/</p>
+        
+    
+    <time datetime="2019-10-15T05:41:33.000Z" itemprop="datePublished">2019-10-15</time>
+  </a>
+</section>
+
+
+
+
+
 
   
 <section class="post" itemscope itemprop="blogitem">
@@ -144,14 +172,12 @@ BootLoader启动于RAM的初始地址，是系统启动或复位以后执行的�
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/09/11/linux内核与驱动编译的关系/" title="linux内核与驱动编译的关系" itemprop="url">
+    <a href="/2019/09/11/Zynq中的linux环境构建/" title="Zedboard中的linux环境构建" itemprop="url">
   
-    <h1 itemprop="name">linux内核与驱动编译的关系</h1>
+    <h1 itemprop="name">Zedboard中的linux环境构建</h1>
     
      
-           <p itemprop="description" >前言内核是一个操作系统的核心，它负责管理系统的任务调度、内存分配、进程管理、文件系统，网络系统，设备驱动程序等。为了正确合理的设置内核编译配置选项，从而只编译系统需要的功能的代码，一般主要有下面3个考虑。
-1. 自己定制编译的内核运行更快
-2. 系统将拥有更多的内存，内核部分将不</p>
+           <p itemprop="description" >前言arm开发板和树莓派等嵌入式系统的运行依赖四个部分，即引导程序bootloader，设备树文件devicetree.dtb，linux内核文件和文件系统，给此类开发板提供外设的驱动涉及到设备树和linux内核的设置，设备树文件设置了一些硬件设备的电气参数，linux内核提供了</p>
         
     
     <time datetime="2019-09-11T14:53:51.000Z" itemprop="datePublished">2019-09-11</time>
@@ -166,12 +192,14 @@ BootLoader启动于RAM的初始地址，是系统启动或复位以后执行的�
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/09/11/Zynq中的linux环境构建/" title="Zedboard中的linux环境构建" itemprop="url">
+    <a href="/2019/09/11/linux内核与驱动编译的关系/" title="linux内核与驱动编译的关系" itemprop="url">
   
-    <h1 itemprop="name">Zedboard中的linux环境构建</h1>
+    <h1 itemprop="name">linux内核与驱动编译的关系</h1>
     
      
-           <p itemprop="description" >前言arm开发板和树莓派等嵌入式系统的运行依赖四个部分，即引导程序bootloader，设备树文件devicetree.dtb，linux内核文件和文件系统，给此类开发板提供外设的驱动涉及到设备树和linux内核的设置，设备树文件设置了一些硬件设备的电气参数，linux内核提供了</p>
+           <p itemprop="description" >前言内核是一个操作系统的核心，它负责管理系统的任务调度、内存分配、进程管理、文件系统，网络系统，设备驱动程序等。为了正确合理的设置内核编译配置选项，从而只编译系统需要的功能的代码，一般主要有下面3个考虑。
+1. 自己定制编译的内核运行更快
+2. 系统将拥有更多的内存，内核部分将不</p>
         
     
     <time datetime="2019-09-11T14:53:51.000Z" itemprop="datePublished">2019-09-11</time>
@@ -266,38 +294,16 @@ V是由个数有限的状态值组成的集合，包括程序中的变量和语�
 
 
 
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2017/10/12/Im_ThingsJournalModel/" title="Im_ThingsJournal" itemprop="url">
-  
-    <h1 itemprop="name">Im_ThingsJournal</h1>
-    
-     
-           <p itemprop="description" >前言  因为老师的需要，需要实现这样一个及时通讯软件，用户可以在模糊查询其他人的位置是否在一个范围内，而不让服务器和查询用户知道被查询用户的具体位置，这是一个位置隐私保护问题，老师提供了一个差分算法，而我们负责实现这个场景，即设计一个IM。
-
-需求  由于演示效果的必要，无需设计</p>
-        
-    
-    <time datetime="2017-10-11T17:01:51.000Z" itemprop="datePublished">2017-10-12</time>
-  </a>
-</section>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix unexpand">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
   </nav>
 
 </div>
-      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
@@ -307,7 +313,7 @@ V是由个数有限的状态值组成的集合，包括程序中的变量和语�
 
   
 <div class="tagslist">
-	<p class="asidetitle">標簽</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			
@@ -327,15 +333,15 @@ V是由个数有限的状态值组成的集合，包括程序中的变量和语�
 			
 		
 			
-				<li><a href="/tags/mathematical-logic/" title="mathematical logic">mathematical logic<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/network/" title="network">network<sup>1</sup></a></li>
+				<li><a href="/tags/network/" title="network">network<sup>2</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/Unclassified/" title="Unclassified">Unclassified<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/mathematical-logic/" title="mathematical logic">mathematical logic<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -343,7 +349,7 @@ V是由个数有限的状态值组成的集合，包括程序中的变量和语�
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情鏈接</p>
+  <p class="asidetitle">Links</p>
     <ul>
         
     </ul>
@@ -353,11 +359,11 @@ V是由个数有限的状态值组成的集合，包括程序中的变量和语�
 
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
 </div>
 
   <div class="weiboshow">
-  <p class="asidetitle">新浪微博</p>
+  <p class="asidetitle">Weibo</p>
     <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=null&verifier=&dpc=1"></iframe>
 </div>
 
@@ -396,7 +402,7 @@ V是由个数有限的状态值组成的集合，包括程序中的变量和语�
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2020 
 		
 		<a href="/about" target="_blank" title="Ping">Ping</a>
 		
@@ -497,7 +503,7 @@ $(document).ready(function(){
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
