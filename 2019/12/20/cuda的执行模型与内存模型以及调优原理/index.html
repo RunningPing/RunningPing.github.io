@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>计算复杂性理论 | RunningPing</title>
+    <title>cuda的执行模型与内存模型以及调优原理 | RunningPing</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Ping">
@@ -14,13 +14,13 @@
     <meta name="description" content="cuda线程执行模型__global__主机端调用，设备端执行__device__设备端执行，设备端调用__host__  主机端调用，主机端执行  SM流式多处理器系统与线程束wrap的联系一个SM拥有32个处理器，16个处理器一组，一个处理器一个时钟周期只能够处理一个整数或者浮点运算，一个线程束在一个组中执行，SM能够同时处理48个线程束，SM能够同时执行1536个线程SM会以线程束为单位分配">
 <meta name="keywords" content="cuda">
 <meta property="og:type" content="article">
-<meta property="og:title" content="计算复杂性理论">
+<meta property="og:title" content="cuda的执行模型与内存模型以及调优原理">
 <meta property="og:url" content="https://runningping.github.io/ping.github.io/2019/12/20/cuda的执行模型与内存模型以及调优原理/index.html">
 <meta property="og:site_name" content="RunningPing">
 <meta property="og:description" content="cuda线程执行模型__global__主机端调用，设备端执行__device__设备端执行，设备端调用__host__  主机端调用，主机端执行  SM流式多处理器系统与线程束wrap的联系一个SM拥有32个处理器，16个处理器一组，一个处理器一个时钟周期只能够处理一个整数或者浮点运算，一个线程束在一个组中执行，SM能够同时处理48个线程束，SM能够同时执行1536个线程SM会以线程束为单位分配">
-<meta property="og:updated_time" content="2020-04-06T01:19:14.960Z">
+<meta property="og:updated_time" content="2020-04-06T01:21:39.408Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="计算复杂性理论">
+<meta name="twitter:title" content="cuda的执行模型与内存模型以及调优原理">
 <meta name="twitter:description" content="cuda线程执行模型__global__主机端调用，设备端执行__device__设备端执行，设备端调用__host__  主机端调用，主机端执行  SM流式多处理器系统与线程束wrap的联系一个SM拥有32个处理器，16个处理器一组，一个处理器一个时钟周期只能够处理一个整数或者浮点运算，一个线程束在一个组中执行，SM能够同时处理48个线程束，SM能够同时执行1536个线程SM会以线程束为单位分配">
 
     
@@ -81,7 +81,7 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2019/12/20/cuda的执行模型与内存模型以及调优原理/" title="计算复杂性理论" itemprop="url">计算复杂性理论</a>
+      <a href="/2019/12/20/cuda的执行模型与内存模型以及调优原理/" title="cuda的执行模型与内存模型以及调优原理" itemprop="url">cuda的执行模型与内存模型以及调优原理</a>
   </h1>
   <p class="article-author">By
        
@@ -128,9 +128,14 @@
 <li>常量内存  设备内存中，同时sm中存在常量缓存 <code>__constant__</code></li>
 <li>纹理内存  特殊内存，在某些数据访问中很高效</li>
 <li>全局内存  设备内存，以内存事务的形式被访问，支持32字节，64字节，128字节 <code>__device__</code></li>
-<li>GPU缓存   存在加载缓存，不存在写缓存<h3 id="内存管理技术"><a href="#内存管理技术" class="headerlink" title="内存管理技术"></a>内存管理技术</h3></li>
+<li>GPU缓存   存在加载缓存，不存在写缓存</li>
+</ol>
+<h3 id="内存管理技术"><a href="#内存管理技术" class="headerlink" title="内存管理技术"></a>内存管理技术</h3><ol>
 <li>内存的分配、传输、释放</li>
-<li>固定内存  通过减少虚拟的分页内存，提高传输数据<h3 id="内存访问模式"><a href="#内存访问模式" class="headerlink" title="内存访问模式"></a>内存访问模式</h3>一行一级缓存是128字节  一级缓存的内存事务是128字节<br>二级缓存使用的是32字节的内存事务<br>为了在内存访问时减少内存事务需要进行对齐内存访问和合并内存访问，用最少的事务次数满足最多的内存请求</li>
+<li>固定内存  通过减少虚拟的分页内存，提高传输数据</li>
+</ol>
+<h3 id="内存访问模式"><a href="#内存访问模式" class="headerlink" title="内存访问模式"></a>内存访问模式</h3><p>一行一级缓存是128字节  一级缓存的内存事务是128字节<br>二级缓存使用的是32字节的内存事务<br>为了在内存访问时减少内存事务需要进行对齐内存访问和合并内存访问，用最少的事务次数满足最多的内存请求</p>
+<ol>
 <li>缓存加载 128字节</li>
 <li>非缓存加载 32字节  非缓存</li>
 <li>只读缓存加载 32字节  缓存</li>
@@ -182,7 +187,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://runningping.github.io/ping.github.io/2019/12/20/cuda的执行模型与内存模型以及调优原理/" data-title="计算复杂性理论 | RunningPing" data-tsina="null" class="share clearfix">
+	  <div data-url="https://runningping.github.io/ping.github.io/2019/12/20/cuda的执行模型与内存模型以及调优原理/" data-title="cuda的执行模型与内存模型以及调优原理 | RunningPing" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>

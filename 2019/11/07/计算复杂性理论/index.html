@@ -18,7 +18,7 @@
 <meta property="og:url" content="https://runningping.github.io/ping.github.io/2019/11/07/计算复杂性理论/index.html">
 <meta property="og:site_name" content="RunningPing">
 <meta property="og:description" content="计算复杂度的研究是为了解决算法的可行问题，其概念建立在计算模型的基础上，较为通用的计算模型有确定型图灵机和不确定型图灵机。  为了建模分析算法，提出符号行、编码和布尔函数的概念，符号行基于字母表，最基础的字母表为{0,1}，其他类型的字母表通过编码映射到{0,1}*，{0,1}上的概念可以通用到其扩展的字母表，布尔函数的定义了{0,1}上的运算。 图灵机是个简单而合理的计算模型，分为确定型图灵机和">
-<meta property="og:updated_time" content="2020-04-06T01:17:04.470Z">
+<meta property="og:updated_time" content="2020-04-06T01:22:58.637Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="计算复杂性理论">
 <meta name="twitter:description" content="计算复杂度的研究是为了解决算法的可行问题，其概念建立在计算模型的基础上，较为通用的计算模型有确定型图灵机和不确定型图灵机。  为了建模分析算法，提出符号行、编码和布尔函数的概念，符号行基于字母表，最基础的字母表为{0,1}，其他类型的字母表通过编码映射到{0,1}*，{0,1}上的概念可以通用到其扩展的字母表，布尔函数的定义了{0,1}上的运算。 图灵机是个简单而合理的计算模型，分为确定型图灵机和">
@@ -103,20 +103,20 @@
 		
 		<p>计算复杂度的研究是为了解决算法的可行问题，其概念建立在计算模型的基础上，较为通用的计算模型有确定型图灵机和不确定型图灵机。</p>
 <ol>
-<li>为了建模分析算法，提出符号行、编码和布尔函数的概念，符号行基于字母表，最基础的字母表为{0,1}，其他类型的字母表通过编码映射到{0,1}*，{0,1}上的概念可以通用到其扩展的字母表，布尔函数的定义了{0,1}上的运算。</li>
+<li>为了建模分析算法，提出符号行、编码和布尔函数的概念，符号行基于字母表，最基础的字母表为<code>{0,1}</code>，其他类型的字母表通过编码映射到<code>{0,1}*</code>，<code>{0,1}</code>上的概念可以通用到其扩展的字母表，布尔函数的定义了<code>{0,1}</code>上的运算。</li>
 <li>图灵机是个简单而合理的计算模型，分为确定型图灵机和不确定型图灵机。图灵机的要素有：<code>状态集合Q</code>，<code>初始状态q0</code>，<code>接受状态集合F</code>，<code>输入符号集合Sigma</code>，<code>带上可用符号集合tao</code>，<code>空格符号B</code>，<code>转移函数</code>。确定型图灵机的转移函数的因变量是唯一确定的，不确定型图灵机的转移函数的因变量是不确定的。确定型图灵机可以根据带数的多少分为单带和多带，可以利用单带图灵机模拟多带图灵机，模拟的过程中单带图灵机的计算效率低于多带图灵机。</li>
-<li>计算复杂性的度量主要为时间和空间复杂性，基于计算模型图灵机，能够定义这两个概念，并且以此能够分析基本的复杂性类：多项式DTM（NTM），定义<code>P=DTIME(poly)</code>,<code>NP=NTIME(poly)</code>,<code>PSPACE=DSPACE(poly)</code>,<code>NPSPACE=NSPACE(poly)</code>,类似的一些重要的复杂性类有LOGSPACE,NLOGSPACE,EXP,NEXP,EXPSPACE。</li>
+<li>计算复杂性的度量主要为时间和空间复杂性，基于计算模型图灵机，能够定义这两个概念，并且以此能够分析基本的复杂性类：多项式DTM（NTM），定义<code>P=DTIME(poly)</code>,<code>NP=NTIME(poly)</code>,<code>PSPACE=DSPACE(poly)</code>,<code>NPSPACE=NSPACE(poly)</code>,类似的一些重要的复杂性类有<code>LOGSPACE</code>,<code>NLOGSPACE</code>,<code>EXP</code>,<code>NEXP</code>,<code>EXPSPACE</code>。</li>
 <li>通过模拟的手段可以实现通用型图灵机，将算法的映射关系模拟成输入带，运行图灵机计算通用型图灵机的时间和空间复杂度。</li>
 <li>通过通用型图灵机能够利用对角线方法和模拟的方法能够得到一些关于<code>P</code>,<code>NP</code>,<code>PSPACE</code>的相关结论。关于重要的复杂性类的一些关系如下所示：<ul>
-<li>logspace ? nlogspace</li>
-<li>nlogspace ? p</li>
-<li>p ? np</li>
-<li>p != exp</li>
-<li>np ? pspace</li>
-<li>pspace != expspace</li>
-<li>np != nexp</li>
-<li>exp ? nexp</li>
-<li>nexp ? expspace</li>
+<li><code>logspace</code> ? <code>nlogspace</code></li>
+<li><code>nlogspace</code> ? <code>p</code></li>
+<li><code>p</code> ? <code>np</code></li>
+<li><code>p</code> != <code>exp</code></li>
+<li><code>np</code> ? <code>pspace</code></li>
+<li><code>pspace</code> != <code>expspace</code></li>
+<li><code>np</code> != <code>nexp</code></li>
+<li><code>exp</code> ? <code>nexp</code></li>
+<li><code>nexp</code> ? <code>expspace</code></li>
 </ul>
 </li>
 </ol>
@@ -160,9 +160,9 @@
 
 
 <div class="next">
-<a href="/2019/12/20/cuda的执行模型与内存模型以及调优原理/"  title="计算复杂性理论">
+<a href="/2019/12/20/cuda的执行模型与内存模型以及调优原理/"  title="cuda的执行模型与内存模型以及调优原理">
  <strong>下一篇：</strong><br/> 
- <span>计算复杂性理论
+ <span>cuda的执行模型与内存模型以及调优原理
 </span>
 </a>
 </div>
