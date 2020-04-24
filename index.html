@@ -75,6 +75,37 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
+    <a href="/2020/04/24/go语法笔记/" title="go语法笔记" itemprop="url">
+  
+    <h1 itemprop="name">go语法笔记</h1>
+    
+     
+           <p itemprop="description" >go run  运行
+go build 编译
+package 与 import
+命令行参数 
+os.Args 获取命令行参数
+
+
+变量声明
+var 变量名字 类型 = 表达式
+简短声明的方式 名字 := 表达式
+类型声明 type 类型名字 底层类型
+new 关键字声明得到的是指</p>
+        
+    
+    <time datetime="2020-04-24T15:25:33.000Z" itemprop="datePublished">2020-04-24</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
     <a href="/2019/12/20/cuda的执行模型与内存模型以及调优原理/" title="cuda的执行模型与内存模型以及调优原理" itemprop="url">
   
     <h1 itemprop="name">cuda的执行模型与内存模型以及调优原理</h1>
@@ -216,12 +247,14 @@ BootLoader启动于RAM的初始地址，是系统启动或复位以后执行的�
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/09/11/Zynq中的linux环境构建/" title="Zedboard中的linux环境构建" itemprop="url">
+    <a href="/2019/09/11/linux内核与驱动编译的关系/" title="linux内核与驱动编译的关系" itemprop="url">
   
-    <h1 itemprop="name">Zedboard中的linux环境构建</h1>
+    <h1 itemprop="name">linux内核与驱动编译的关系</h1>
     
      
-           <p itemprop="description" >前言arm开发板和树莓派等嵌入式系统的运行依赖四个部分，即引导程序bootloader，设备树文件devicetree.dtb，linux内核文件和文件系统，给此类开发板提供外设的驱动涉及到设备树和linux内核的设置，设备树文件设置了一些硬件设备的电气参数，linux内核提供了</p>
+           <p itemprop="description" >前言内核是一个操作系统的核心，它负责管理系统的任务调度、内存分配、进程管理、文件系统，网络系统，设备驱动程序等。为了正确合理的设置内核编译配置选项，从而只编译系统需要的功能的代码，一般主要有下面3个考虑。
+1. 自己定制编译的内核运行更快
+2. 系统将拥有更多的内存，内核部分将不</p>
         
     
     <time datetime="2019-09-11T14:53:51.000Z" itemprop="datePublished">2019-09-11</time>
@@ -236,14 +269,12 @@ BootLoader启动于RAM的初始地址，是系统启动或复位以后执行的�
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2019/09/11/linux内核与驱动编译的关系/" title="linux内核与驱动编译的关系" itemprop="url">
+    <a href="/2019/09/11/Zynq中的linux环境构建/" title="Zedboard中的linux环境构建" itemprop="url">
   
-    <h1 itemprop="name">linux内核与驱动编译的关系</h1>
+    <h1 itemprop="name">Zedboard中的linux环境构建</h1>
     
      
-           <p itemprop="description" >前言内核是一个操作系统的核心，它负责管理系统的任务调度、内存分配、进程管理、文件系统，网络系统，设备驱动程序等。为了正确合理的设置内核编译配置选项，从而只编译系统需要的功能的代码，一般主要有下面3个考虑。
-1. 自己定制编译的内核运行更快
-2. 系统将拥有更多的内存，内核部分将不</p>
+           <p itemprop="description" >前言arm开发板和树莓派等嵌入式系统的运行依赖四个部分，即引导程序bootloader，设备树文件devicetree.dtb，linux内核文件和文件系统，给此类开发板提供外设的驱动涉及到设备树和linux内核的设置，设备树文件设置了一些硬件设备的电气参数，linux内核提供了</p>
         
     
     <time datetime="2019-09-11T14:53:51.000Z" itemprop="datePublished">2019-09-11</time>
@@ -269,27 +300,6 @@ V是由个数有限的状态值组成的集合，包括程序中的变量和语�
         
     
     <time datetime="2019-01-04T14:53:51.000Z" itemprop="datePublished">2019-01-04</time>
-  </a>
-</section>
-
-
-
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2017/10/14/MyBlog/" title="MyBlog" itemprop="url">
-  
-    <h1 itemprop="name">MyBlog</h1>
-    
-     
-           <p itemprop="description" >前言搭建一个博客的方式有许多，这里总结一下我使用JSP&amp;amp;Servlet搭建的博客。
-思路吸取别人博客的一些经验，我的博客大致思路是这样的，使用数据库建立一个表存储我写的文章，然后再建立一个表存储游客对我的文章的评论。这样，我可以直接向数据库里存储我写好的html页面，别人</p>
-        
-    
-    <time datetime="2017-10-13T17:01:51.000Z" itemprop="datePublished">2017-10-14</time>
   </a>
 </section>
 
@@ -350,6 +360,10 @@ V是由个数有限的状态值组成的集合，包括程序中的变量和语�
 		
 			
 				<li><a href="/tags/cuda/" title="cuda">cuda<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/go/" title="go">go<sup>1</sup></a></li>
 			
 		
 		</ul>

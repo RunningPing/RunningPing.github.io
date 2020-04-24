@@ -1,0 +1,636 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-cn">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>go语法笔记 | RunningPing</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Ping">
+    
+
+    
+    <meta name="description" content="go run  运行 go build 编译 package 与 import 命令行参数  os.Args 获取命令行参数   变量声明 var 变量名字 类型 = 表达式 简短声明的方式 名字 := 表达式 类型声明 type 类型名字 底层类型 new 关键字声明得到的是指针 指针即为 *类型  指针可比较   range 的用法  foreach 返回两个值  一个是索引  一个是值的内">
+<meta name="keywords" content="go">
+<meta property="og:type" content="article">
+<meta property="og:title" content="go语法笔记">
+<meta property="og:url" content="https://runningping.github.io/ping.github.io/2020/04/24/go语法笔记/index.html">
+<meta property="og:site_name" content="RunningPing">
+<meta property="og:description" content="go run  运行 go build 编译 package 与 import 命令行参数  os.Args 获取命令行参数   变量声明 var 变量名字 类型 = 表达式 简短声明的方式 名字 := 表达式 类型声明 type 类型名字 底层类型 new 关键字声明得到的是指针 指针即为 *类型  指针可比较   range 的用法  foreach 返回两个值  一个是索引  一个是值的内">
+<meta property="og:updated_time" content="2020-04-24T15:27:14.919Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="go语法笔记">
+<meta name="twitter:description" content="go run  运行 go build 编译 package 与 import 命令行参数  os.Args 获取命令行参数   变量声明 var 变量名字 类型 = 表达式 简短声明的方式 名字 := 表达式 类型声明 type 类型名字 底层类型 new 关键字声明得到的是指针 指针即为 *类型  指针可比较   range 的用法  foreach 返回两个值  一个是索引  一个是值的内">
+
+    
+    <link rel="alternative" href="/atom.xml" title="RunningPing" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="RunningPing" title="RunningPing"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="RunningPing">RunningPing</a></h1>
+				<h2 class="blog-motto">biubiubiu</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:runningping.github.io/ping.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2020/04/24/go语法笔记/" title="go语法笔记" itemprop="url">go语法笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Ping" target="_blank" itemprop="author">Ping</a>
+		
+  <p class="article-time">
+    <time datetime="2020-04-24T15:25:33.000Z" itemprop="datePublished"> 发表于 2020-04-24</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#常用的函数"><span class="toc-number">1.</span> <span class="toc-text">常用的函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#问题"><span class="toc-number">2.</span> <span class="toc-text">问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内建函数"><span class="toc-number">3.</span> <span class="toc-text">内建函数</span></a></li></ol>
+		
+		</div>
+		
+		<ol>
+<li><code>go run</code>  运行</li>
+<li><code>go build</code> 编译</li>
+<li><code>package</code> 与 <code>import</code></li>
+<li>命令行参数 <ul>
+<li><code>os.Args</code> 获取命令行参数</li>
+</ul>
+</li>
+<li>变量声明<ul>
+<li><code>var 变量名字 类型 = 表达式</code></li>
+<li>简短声明的方式 <code>名字 := 表达式</code></li>
+<li>类型声明 <code>type 类型名字 底层类型</code></li>
+<li><code>new</code> 关键字声明得到的是指针</li>
+<li>指针即为 <code>*类型</code>  指针可比较</li>
+</ul>
+</li>
+<li><code>range</code> 的用法  foreach 返回两个值  一个是索引  一个是值的内容</li>
+<li>关于占位符，对于返回多个值的函数或者是谓词，可以忽略后面的占位符 <ul>
+<li>并不是 返回多个值的函数所有值都需要表示</li>
+</ul>
+</li>
+<li><code>string</code>记录的是<code>UTF8</code>编码的数组 <code>bytes.Buffer</code>动态增长的字符串类型</li>
+<li>常量声明  <code>const 名字 基础类型名字</code><ul>
+<li>常量是无类型的  能够直接赋值变量  进行自动转换 转换的前提是目标类型能够容纳原常量</li>
+<li>无类型的常量  默认为<code>int</code> <code>float64</code> <code>complex128</code></li>
+</ul>
+</li>
+<li>数组 固定长度 特定类型  <code>[num]type</code> 数组加数组长度为一个复合类型</li>
+<li>slice 变长序列 <code>[]T</code> <code>len</code> <code>slice</code>的长度 <code>cap</code> <code>slice</code>的容量 为数组的引用 <code>name := array[begin:end]</code>  为引用<ul>
+<li><code>nil</code>的<code>slice</code>没有底层数组  <code>len</code> 和 <code>cap</code> 为 0  但是<code>len</code>和<code>cap</code>为0的有可能不是<code>nil</code>，但是他们处理方式相同</li>
+</ul>
+</li>
+<li><code>map[K]V</code>  向一个空的<code>map</code>插入元素会异常  其他空<code>map</code>操作正常</li>
+<li>结构体  <code>type name struct{}</code> 能够直接通过指针以点操作符访问成员 成员名的首字母大写即为可导出的 <ul>
+<li>匿名成员  结构体的成员为一个命名结构体时可以省略名字</li>
+</ul>
+</li>
+<li>函数<ul>
+<li>声明 <code>func name(parameter-list) (result-list) {}</code></li>
+<li>错误 <ul>
+<li>go将函数运行失败作为预期的返回值返回 主要有一下的返回值</li>
+<li><code>error</code> 接口</li>
+<li>ok boolean</li>
+<li>错误处理方式：直接与处理后返回 重试  输出错误信息返回  输出错误信息不返回</li>
+</ul>
+</li>
+<li>函数值为一种引用类型 不可比较 能够当做函数参数 作为一种状态，将自己的局部状态作为值</li>
+<li>匿名函数  函数的字面值语法，与函数声明相同，但是没有函数名  作为一种闭包的形式执行，注意闭包中变量的引用问题 range循环中 和 for循环中  go语句和defer语句</li>
+<li>可变参数  …类型  切片传入 slice_name…</li>
+<li>谓词<code>defer</code> 在函数返回时执行语句 和java不同的是defer能够修改返回值</li>
+<li>谓词<code>panic</code> 触发异常主要用于导致程序崩溃的错误，上层也无法解决的错误，程序只能崩溃 panic的参数为异常信息通常为接口</li>
+<li>谓词<code>recover</code> 获取<code>panic</code>异常的相关信息  处理该异常</li>
+</ul>
+</li>
+<li>面向对象与方法<ul>
+<li>方法选择器 <code>func (name structname) funcName(para-list) (re-list){}</code></li>
+<li>方法选择器不能更新对象  只有方法选择器中的对象为指针时才能更新对象  go有自动取地址的功能</li>
+<li>方法选择器返回的是一个函数值</li>
+<li>方法表达式 即通过类型返回的方法可以作为普通函数使用，第一个参数作为接收器</li>
+<li>封装的方式 通过 大小写字母实现</li>
+</ul>
+</li>
+<li>面向对象与结构<ul>
+<li>调用方和实现方的约定致使调用可替换</li>
+<li><code>type name interface{}</code> 接口描述了一系列方法的集合  接口里的方法定义不需要加<code>func</code></li>
+<li>空接口类型  <code>interface{}</code> </li>
+<li>接口可以实现在指针上，但是这样不能进行转换</li>
+<li>变量分为  类型 和  值 空接口值的变量调用方法会报错 动态分配给接口实际的类型</li>
+<li>接口可比较  接口比较的规则是<code>nil</code>或者是相同的可比较的类型来比较接口值 接口只有类型和值都为<code>nil</code>时才为<code>nil</code></li>
+<li>常用的接口<ul>
+<li><code>sort.Interface</code></li>
+<li><code>error Error() string</code></li>
+</ul>
+</li>
+<li>类型断言 <code>x.(T)</code>  对nil进行断言会panic 返回一个值时表示是否为这个值  返回两个值时 第一个表示这个类型的值，第二个表示是否是这个类型的值（否的话第一个值会是<code>nil</code>）</li>
+<li>类型开关 接口的作用 一个是实现方法而不用专注具体的类型，一个是调用者只需要关心接口的类型，调用完成逻辑 <code>switch x.(type)</code> 判断类型 类型开关也会返回新的x值</li>
+</ul>
+</li>
+<li><code>go</code>并发<ul>
+<li><code>goroutine</code> main运行在一个<code>goroutine</code> <code>go</code>谓词新建一个goruntine 新的函数会在goruntine中执行</li>
+<li>channels 数据通信的类型 chan type  为引用 <ul>
+<li>发送 <code>chan &lt;- var</code> 接受 <code>&lt;- chan</code></li>
+<li>可关闭  关闭后不可发送 可接受 close内建函数</li>
+<li>缓存限制 <code>make(chan type, int)</code></li>
+<li>无缓存 同步<code>channels</code> 阻塞 routine happens before</li>
+<li>chan接收时可以选择第二个参数 表明chan是否关闭  可是用range谓词遍历chan 可运行知道chan关闭  chan不需要显式的关闭，在没有引用时会被自动回收  重复关闭chan异常</li>
+<li>单向<code>chan chan&lt;-type</code> 只发送 <code>&lt;-chan type</code> 只接受 只有发送者才能close(chan)</li>
+<li>缓存chan cap(chan) 空间  len(ch) 长度 </li>
+<li>泄露的goroutinue不会被回收</li>
+<li>sync.WaitGroup() Add() Done() Wait() 能够实现计数等待的功能</li>
+<li>select语句 select{case …} 监听多个channel的发送与接收 在某个chan有事件发生时就执行该分支</li>
+<li>channel的零值为nil，nil的channel发送与接收操作永远阻塞</li>
+<li>通过关闭channel实现广播</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>基于共享变量的并发<ul>
+<li>数据竞争  两个以上的goroutine并发访问相同的变量且其中一个至少为写操作时</li>
+<li>避免数据竞争的方式 <ul>
+<li>不进行写操作</li>
+<li>避免通过多个goroutine访问变量 不使用共享数据通信，使用通信共享数据  以channel实现</li>
+<li>互斥</li>
+</ul>
+</li>
+<li>sync.Mutex Lock Unlock 通过监控保证变量被顺序访问 封装能够使我们获得数据结构的不变性，mutex能够实现并发的不变性（并发安全）</li>
+<li>sync.RWMutex 多读单写 RLock() RUnlock()</li>
+<li>单个goroutine的执行顺序是确定的</li>
+<li>sync.Once 保证单例模式的实现</li>
+<li>竞争条件检测 -race</li>
+<li>基于通信机制实现并发程序</li>
+<li>goroutine和线程  <ul>
+<li>线程是固定栈 goroutine动态栈</li>
+<li>线程上下文切换由内核完成 goroutine由go完成</li>
+<li>goroutine没有线程局部存储</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>包和工具<ul>
+<li>包的编译：导入包开头声明 禁止包环依赖 目标文件记录包的依赖关系</li>
+<li>包的导入：每个包由全局唯一的字符串所标识的导入路径定位</li>
+<li>包名 最后一段</li>
+<li>包的导入  可以给包重命名</li>
+<li>工具<ul>
+<li>go get 获取的代码是真实的仓库  -u 最新</li>
+<li>go env</li>
+<li>go build 相对路径 绝对路径 当前路径所有包 不加路径为GoPath环境变量下的路径 -i安装每个目标依赖的包</li>
+<li>go run 直接编译后运行包</li>
+<li>go install 会保留遍历的中间产物 安装中间包</li>
+<li>go 编译注释</li>
+<li>go doc 查看注释  <a href="https://godoc.org" target="_blank" rel="external">https://godoc.org</a></li>
+<li>内部包 internal 只能被同一父目录的包导入</li>
+<li>go list 查询可用包的信息 -json -f设置模板格式化打印</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>测试<ul>
+<li>必须导入 testing</li>
+<li>测试函数<ul>
+<li>TestName() Test开头后缀名必须大写</li>
+<li>go test <ul>
+<li>-v 打印每个测试函数的名字和运行时间</li>
+<li>-run=”” 正则表达式  只有测试函数被正确匹配才会执行</li>
+</ul>
+</li>
+<li>t.Fatal 或 t.Fatalf 停止测试</li>
+<li>随机测试</li>
+<li>白盒测试 对复杂的的实现提供更多的测试覆盖 知道函数的具体实现  黑盒测试不知道</li>
+<li>避免不稳定的测试 只检测你真正关心的属性</li>
+<li>测试覆盖率  <ul>
+<li>go tool cover go工具链底层可执行程序</li>
+<li>-coverprofile=c.out执行与否 -covermode=count次数</li>
+<li>go tool cover -html=c.out可视化显示</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>基准测试函数<ul>
+<li>BenchmarkName</li>
+<li>-bench=正则表达式 </li>
+<li>-benchmem 内存分配情况 </li>
+</ul>
+</li>
+<li>示例函数<ul>
+<li>ExampleName()</li>
+<li>文档doc时使用</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="常用的函数"><a href="#常用的函数" class="headerlink" title="常用的函数"></a>常用的函数</h2><p>strings.Join 快速链接字符串<br>strings.Split<br>range<br>os.Open<br>net</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>即使变量由表达式临时生成，那么表达式也必须能接受&amp;取地址操作<br>基础类型 复合类型 引用类型 接口类型<br>变量的生命周期：从每个包级的变量和每个当前运行函数的每一个局部变量开始，通过指针或引用的访问路径遍历，是否可以找到该变量。如果不存在这样的访问路径，那么说明该变量是不可达的，也就是说它是否存在并不会影响程序后续的计算结果</p>
+<h2 id="内建函数"><a href="#内建函数" class="headerlink" title="内建函数"></a>内建函数</h2><p><code>new(类型)</code><br><code>len()</code> 数组 字符串的长度<br><code>make()</code> 函数 创建返回的总是引用 make([]T, len, cap)创建slice make(map[K]V) 创建map<br><code>append()</code> 为slice添加元素<br>通过字面值语法{}可以创建并赋值数组 slice map 结构体  都有顺序语法和指定成员名的语法<br><code>delete</code></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/go/">go</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://runningping.github.io/ping.github.io/2020/04/24/go语法笔记/" data-title="go语法笔记 | RunningPing" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2019/12/20/cuda的执行模型与内存模型以及调优原理/" title="cuda的执行模型与内存模型以及调优原理">
+  <strong>上一篇：</strong><br/>
+  <span>
+  cuda的执行模型与内存模型以及调优原理</span>
+</a>
+</div>
+
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#常用的函数"><span class="toc-number">1.</span> <span class="toc-text">常用的函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#问题"><span class="toc-number">2.</span> <span class="toc-text">问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内建函数"><span class="toc-number">3.</span> <span class="toc-text">内建函数</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/algorithm/" title="algorithm">algorithm<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/zynq/" title="zynq">zynq<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JSP-Servlet/" title="JSP&amp;Servlet">JSP&amp;Servlet<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Unclassified/" title="Unclassified">Unclassified<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/mathematical-logic/" title="mathematical logic">mathematical logic<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/network/" title="network">network<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cuda/" title="cuda">cuda<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/go/" title="go">go<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=null&verifier=&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Larry Page in Google. <br/>
+			This is my blog,believe it or not.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2398935587" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2020 
+		
+		<a href="/about" target="_blank" title="Ping">Ping</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
